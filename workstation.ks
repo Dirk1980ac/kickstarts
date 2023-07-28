@@ -1,6 +1,5 @@
-#version=F38
-# Use graphical install
-# graphical
+# Use graphical install ?
+text
 
 # Keyboard layouts
 keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
