@@ -1,4 +1,4 @@
-# Kiockstart files for Fedora Linux automated network installations  
+# Kickstart files for Fedora Linux automated network installations  
 
 This repository contains the kickstart files I use for my PXE (Bios/UEFI) boot server for automated installs of Fedora Linux.  
 
@@ -22,3 +22,7 @@ These kickstart installation have the following features:
 - ipa-srv.ks: Fedora Server with FreeIPA-Server installed
 - webserver.ks: Fedora Server with mariadb and httpd (apache) pre installed and enabled
 - workstation.ks: Fedora Workstation default installation
+
+## License
+
+These project is release under the CC0 license. You are free to use, modify and share these files without any limitations.
