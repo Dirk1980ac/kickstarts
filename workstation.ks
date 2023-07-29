@@ -67,12 +67,4 @@ dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
-
-# Create yggdrasil chkconfi
-yggdrasil --genconf /etc/yggdrasil.conf
-
-# Set up initial peers for yggdrasil
-sed -i \
-  's/\[\]/\[\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443\n  \]/'\
-  /etc/yggdrasil.conf
 %end

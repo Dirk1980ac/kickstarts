@@ -4,7 +4,7 @@ This repository contains the kickstart files I use for my PXE (Bios/UEFI) boot s
 
 These files are derived from these reesident in the fedora-kickstarts and the spin-kickstarts packages of Fedora Linux, actually from Fedora 38.  
 
-## General eatures
+## General features
 
 These kickstart installation have the following features:  
 
@@ -13,7 +13,7 @@ These kickstart installation have the following features:
 - The RPMFusion repositories are installed during post installation scripts.
 - For server variants the root password is set to, of course you shoult change it right after installation. (Password: rootpass)
 - Workstation variants or other variants with GUI come up with the setup-assistant as usual.
-- Yggdrasil is installed and the configuration file will be created but it is not enabled after installation. (A script to insert a few initial peers will be added soon.)
+- Yggdrasil is installed.
 - The FreeIPA client package is installed. (It is used in my Networks.)
 - The kickstart installatio runs entirely in text mode to avoid some irritating behaviour in graphical mode while it is fetching the repository metadata.
 

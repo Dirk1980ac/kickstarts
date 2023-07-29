@@ -46,17 +46,7 @@ rootpw --iscrypted $6$hqJqmmDJAWWaF5oe$21hb0VS7bmspBD68l1RlzDN8vWSkwDxEGuVrf1aYf
 
 %post
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-
-# install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
 
-# Create yggdrasil chkconfi
-yggdrasil --genconf /etc/yggdrasil.conf
-
-# Set up initial peers for yggdrasil
-sed -i \
-  's/\[\]/\[\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443\n  \]/'\
-  /etc/yggdrasil.conf
 %end
