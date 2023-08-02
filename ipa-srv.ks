@@ -28,9 +28,6 @@ mc
 
 %end
 
-# Run the Setup Agent on first boot
-firstboot --enable
-
 # Generated using Blivet version 3.7.1
 # ignoredisk --only-use=vda
 autopart --type=btrfs

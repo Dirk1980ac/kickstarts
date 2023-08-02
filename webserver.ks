@@ -14,10 +14,6 @@ repo --name=rpmfusion-free-updates --baseurl=http://mirrors.rpmfusion.org/free/f
 repo --name=rpmfusion-nonfree --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
 repo --name=rpmfusion-nonfree-updates --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
 
-
-# Run the Setup Agent on first boot
-firstboot --enable
-
 # Generated using Blivet version 3.7.1
 # ignoredisk --only-use=vda
 autopart --type=btrfs
