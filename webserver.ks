@@ -49,8 +49,7 @@ dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
 
 
-# Set polkit rules for domain clients 
-# Domain admins can administer this machine
+# Set polkit rules for the server
 cat > /etc/polkit-1/rules.d/40-freeipa.rules  <<EOF
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];

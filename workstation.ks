@@ -31,6 +31,7 @@ timezone Europe/Berlin --utc
 @^workstation-product-environment
 @anaconda-tools
 @domain-client
+@guest-agents
 aajohan-comfortaa-fonts
 anaconda
 anaconda-install-env-deps
@@ -65,10 +66,12 @@ dnf groupupdate -y sound-and-video
 dnf install -y rpmfusion-nonfree-release-tainted
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
+# Install some additional muöltimedia software
+dnf install -y vlc kodi media-downloader video-downloader
+
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
-
 
 # Set polkit rules for domain clients 
 # Domain admins can administer this machine

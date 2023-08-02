@@ -22,6 +22,7 @@ These kickstart installation have the following features:
 - webserver.ks: Fedora Server with mariadb and httpd (apache) installed and enabled
 - workstation.ks: Fedora Workstation default installation
 - develiper-ws.ks: Installs Fedora Workstation with developer Libraries ind VScode.
+- seclab.ks: Installs Fedora Security Lab.
 
 ## Localization
 

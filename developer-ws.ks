@@ -16,7 +16,6 @@ repo --name=rpmfusion-free --baseurl=http://mirrors.rpmfusion.org/free/fedora/$r
 repo --name=rpmfusion-free-updates --baseurl=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
 repo --name=rpmfusion-nonfree --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
 repo --name=rpmfusion-nonfree-updates --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
-repo --name=VScode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -59,19 +58,20 @@ glib2-devel
 -gfs2-utils
 -reiserfs-utils
 mc
-code
 %end
 
 %post
 #Install RPMFusion Repositories
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 dnf groupupdate core -y
+dnf install -y rpmfusion-nonfree-release-tainted
 dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
 dnf groupupdate -y sound-and-video
-dnf install -y rpmfusion-nonfree-release-tainted
+
+# Install non-free firmware drivers
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
-# Install repository vor Visual Studioo Code Community Edition
+# Install repository for Visual Studioo Code Community Edition
 rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cat > /etc/yum.repos.d/vscode.repo <<EOF
 [code]
@@ -82,8 +82,10 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
+# Install VScode
+dnf install -y code
+
 # Set polkit rules for domain clients 
-# Domain admins can administer this machine
 cat > /etc/polkit-1/rules.d/40-freeipa.rules  <<EOF
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
