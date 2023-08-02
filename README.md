@@ -20,8 +20,9 @@ These kickstart installation have the following features:
 ## The files (more will be coming soon)
 
 - ipa-srv.ks: Fedora Server with FreeIPA-Server installed
-- webserver.ks: Fedora Server with mariadb and httpd (apache) pre installed and enabled
+- webserver.ks: Fedora Server with mariadb and httpd (apache) installed and enabled
 - workstation.ks: Fedora Workstation default installation
+- develiper-ws.ks: Installs Fedora Workstation with developer Libraries ind VScode.
 
 ## License
 

@@ -13,7 +13,6 @@ repo --name=rpmfusion-free --baseurl=http://mirrors.rpmfusion.org/free/fedora/$r
 repo --name=rpmfusion-free-updates --baseurl=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
 repo --name=rpmfusion-nonfree --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
 repo --name=rpmfusion-nonfree-updates --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
-repo --name=VScode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -33,6 +32,8 @@ timesource --ntp-server=kobayashi-maru.sg-intranet.lan
 @^workstation-product-environment
 @anaconda-tools
 @domain-client
+@C Development Tools and Libraries
+@Development Tools
 aajohan-comfortaa-fonts
 anaconda
 anaconda-install-env-deps
@@ -45,6 +46,8 @@ kernel
 kernel-modules
 kernel-modules-extra
 freeipa-client
+libevent-devel
+glib2-devel
 -@dial-up
 -@input-methods
 -@standard
@@ -53,8 +56,6 @@ freeipa-client
 -gfs2-utils
 -reiserfs-utils
 mc
-code
-
 
 %end
 
