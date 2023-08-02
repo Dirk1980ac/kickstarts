@@ -6,9 +6,6 @@ keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
 # System language
 lang de_DE.UTF-8
 
-# Lock root password so anaconda does not ask to set it
-rootpw --lock
-
 # Network installation repos
 url --url="https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os"
 repo --name=updates
@@ -16,6 +13,7 @@ repo --name=rpmfusion-free --baseurl=http://mirrors.rpmfusion.org/free/fedora/$r
 repo --name=rpmfusion-free-updates --baseurl=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
 repo --name=rpmfusion-nonfree --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
 repo --name=rpmfusion-nonfree-updates --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
+repo --name=VScode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -29,35 +27,25 @@ clearpart --none --initlabel
 
 # System timezone
 timezone Europe/Berlin --utc
-
-%packages --ignoremissing
-@^workstation-product-environment
-@anaconda-tools
+%packages
 @domain-client
-@C Development Tools and Libraries
-@Development Tools
-aajohan-comfortaa-fonts
-anaconda
-anaconda-install-env-deps
-anaconda-live
-chkconfig
-dracut-live
-glibc-all-langpacks
-initscripts
-kernel
-kernel-modules
-kernel-modules-extra
-freeipa-client
-libevent-devel
-glib2-devel
--@dial-up
--@input-methods
--@standard
--device-mapper-multipath
--fcoe-utils
--gfs2-utils
--reiserfs-utils
-mc
+@admin-tools
+@guest-agents
+@headless-management
+@network-server
+@system-tools
+
+# install env-group to resolve RhBug:1891500
+@^xfce-desktop-environment
+
+@xfce-apps
+
+# Security tools
+@security-lab
+security-menus
+
+# unlock default keyring. FIXME: Should probably be done in comps
+gnome-keyring-pam
 %end
 
 %post

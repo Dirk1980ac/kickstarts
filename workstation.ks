@@ -1,5 +1,5 @@
 # Use graphical install ?
-text
+graphical
 
 # Keyboard layouts
 keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
@@ -26,8 +26,7 @@ clearpart --none --initlabel
 
 
 # System timezone
-timezone Europe/Berlin
-timesource --ntp-server=kobayashi-maru.sg-intranet.lan
+timezone Europe/Berlin --utc
 
 %packages --ignoremissing
 @^workstation-product-environment

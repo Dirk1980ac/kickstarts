@@ -1,5 +1,5 @@
 # Use graphical install ?
-text
+graphical
 
 # Keyboard layouts
 keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
@@ -37,7 +37,6 @@ autopart --type=btrfs
 # Partition clearing information
 clearpart --none --initlabel
 
-timesource --ntp-server=kobayashi-maru.dg-intranet.lan
 # System timezone
 timezone Europe/Berlin --utc
 

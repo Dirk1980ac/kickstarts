@@ -15,7 +15,6 @@ These kickstart installation have the following features:
 - Workstation variants or other variants with GUI come up with the setup-assistant as usual.
 - Yggdrasil is installed.
 - The FreeIPA client package is installed. (It is used in my Networks.)
-- The kickstart installatio runs entirely in text mode to avoid some irritating behaviour in graphical mode while it is fetching the repository metadata.
 
 ## The files (more will be coming soon)
 
@@ -27,3 +26,7 @@ These kickstart installation have the following features:
 ## License
 
 These project is release under the CC0 license. You are free to use, modify and share these files without any limitations.
+
+## Localization
+
+You might want to change the language, timezone and keyboard layout  to fit yout needs since I set them to german/germany because that is where I live.
