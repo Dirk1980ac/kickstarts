@@ -34,9 +34,9 @@ The installation will start in graphical mode. No question will be asked since e
 
 You must have enough unpartitioned space on one of your harddisks. Existing partitions will be left untouched for security reasons.If you do not have enough unpartitoned edisk space youi will have di change your partitions manually in the installer and the installation would not continue automatically.  
 
-The installer will download the metadata of the repositories. If you click on any of the displayed options while this is happening the automatic installation will be stopped and you have to click the install button manually.  
+- For Workstation variants: The installer will download the metadata of the repositories. If you click on any of the displayed options while this is happening the automatic installation will be stopped and you have to click the install button manually. If you just let the download of the metadata happen without interruption the installer will right after that continue to download and install the software which is selected in the kickstart file.
 
-If you just let the download of the metadata happen without interruption the installer will right after that continue to download and install the software which is selected in the kickstart file.
+- For Server variants: The whole installation is done in text mode. You have jost to press enter when requested to reboot and start the installed system. <u>Remember to change the root password"</u>
 
 ## License
 
