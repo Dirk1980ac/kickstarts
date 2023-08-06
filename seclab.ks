@@ -17,6 +17,9 @@ repo --name=rpmfusion-nonfree-updates --baseurl=http://mirrors.rpmfusion.org/non
 # Run the Setup Agent on first boot
 firstboot --enable
 
+# Lock root password so anaconda does not ask to set it
+rootpw --lock
+
 # Generated using Blivet version 3.4.3
 # ignoredisk --only-use=nvme0n1
 autopart --type=btrfs
