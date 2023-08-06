@@ -38,6 +38,9 @@ autopart --type=btrfs
 # Partition clearing information
 clearpart --none --initlabel
 
+# Reboot automatically after installation
+reboot --eject
+
 # System timezone
 timezone Europe/Berlin --utc
 
