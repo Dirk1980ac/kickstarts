@@ -16,7 +16,7 @@ These kickstart installation have the following features:
 - Yggdrasil is installed.
 - The FreeIPA client package is installed. (It is used in my Networks.)
 
-## The files (more will be coming soon)
+## The kickstart files (more will be coming soon)
 
 - ipa-srv.ks: Fedora Server with FreeIPA-Server installed
 - webserver.ks: Fedora Server with mariadb and httpd (apache) installed and enabled
