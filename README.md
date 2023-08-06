@@ -40,4 +40,4 @@ You must have enough unpartitioned space on one of your harddisks. Existing part
 
 ## License
 
-These project is release under the CC0 license. You are free to use, modify and share these files without any limitations.
+These project is released under the CC0 license. You are free to use, modify and share these files without any limitations.
