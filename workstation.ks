@@ -46,19 +46,11 @@ kernel
 kernel-modules
 kernel-modules-extra
 freeipa-client
--@dial-up
--@input-methods
--@standard
--device-mapper-multipath
--fcoe-utils
--gfs2-utils
--reiserfs-utils
 mc
 code
 vlc
 hexchat
 mumble
-
 %end
 
 %post

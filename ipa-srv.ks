@@ -172,3 +172,5 @@ polkit.addRule(function(action, subject) {
 EOF
 
 %end
+
+reboot 
