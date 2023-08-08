@@ -63,6 +63,11 @@ git2cl
 pre-commit
 gitg
 mc
+vlc
+hexchat
+mumble
+kodi
+kodi-pvr-iptvsimple
 %end
 
 %post
