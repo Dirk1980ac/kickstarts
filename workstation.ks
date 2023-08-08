@@ -55,6 +55,9 @@ freeipa-client
 -reiserfs-utils
 mc
 code
+vlc
+hexchat
+mumble
 
 %end
 

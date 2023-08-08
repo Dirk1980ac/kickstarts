@@ -4,6 +4,8 @@ This repository contains the kickstart files I use for my PXE (Bios/UEFI) boot s
 
 These files are derived from these reesident in the fedora-kickstarts and the spin-kickstarts packages of Fedora Linux, actually from Fedora 38.  
 
+The kickstart files are version independen as they use variables vor version number ans system arch.
+
 ## General features
 
 These kickstart installation have the following features:  
@@ -36,7 +38,7 @@ You must have enough unpartitioned space on one of your harddisks. Existing part
 
 - For Workstation variants: The installer will download the metadata of the repositories. If you click on any of the displayed options while this is happening the automatic installation will be stopped and you have to click the install button manually. If you just let the download of the metadata happen without interruption the installer will right after that continue to download and install the software which is selected in the kickstart file.
 
-- For Server variants: The whole installation is done in text mode. Remember to change the root password!
+- For Server variants: The whole installation is done in text mode. __Remember to change the root password!__
 
 ## License
 

@@ -38,6 +38,7 @@ timezone Europe/Berlin --utc
 @headless-management
 @network-server
 @system-tools
+initial-setup
 
 # install env-group to resolve RhBug:1891500
 @^xfce-desktop-environment
