@@ -41,6 +41,7 @@ phpmyadmin
 httpd
 mariadb-server
 mc
+NetworkManager-tui
 %end
 
 # Enable services

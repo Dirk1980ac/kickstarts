@@ -24,6 +24,7 @@ repo --name=rpmfusion-nonfree-updates --baseurl=http://download1.rpmfusion.org/n
 @headless-management
 @network-server
 @system-tools
+NetworkManager-tui
 freeipa-server-dns
 mc
 
