@@ -52,14 +52,22 @@ kernel-modules-extra
 freeipa-client
 libevent-devel
 glib2-devel
--@dial-up
--@input-methods
--@standard
--device-mapper-multipath
--fcoe-utils
--gfs2-utils
--reiserfs-utils
+pcsc-lite-devel
+gtk4-devel
+gpgme-devel
+kernel-devel
+autoconf
+autoconf-archive
+git
+git2cl
+pre-commit
+gitg
 mc
+vlc
+hexchat
+mumble
+kodi
+kodi-pvr-iptvsimple
 %end
 
 %post
@@ -73,7 +81,7 @@ dnf groupupdate -y sound-and-video
 # Install non-free firmware drivers
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
-# Install repository for Visual Studioo Code Community Edition
+# Install repository for Visual Studio Code Community Edition
 rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cat > /etc/yum.repos.d/vscode.repo <<EOF
 [code]

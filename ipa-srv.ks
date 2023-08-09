@@ -52,6 +52,9 @@ dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
 
+# Install additional firmware packages
+dnf install -y rpmfusion-nonfree-release-tainted
+dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
@@ -172,3 +175,5 @@ polkit.addRule(function(action, subject) {
 EOF
 
 %end
+
+reboot 

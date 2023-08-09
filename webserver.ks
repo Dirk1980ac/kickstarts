@@ -54,6 +54,10 @@ dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-
 dnf groupupdate core -y
 systemctl enable httpd mariadb
 
+# Install additional firmware packages
+dnf install -y rpmfusion-nonfree-release-tainted
+dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
+
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
