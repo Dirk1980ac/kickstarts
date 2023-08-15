@@ -49,11 +49,8 @@ kernel-modules
 kernel-modules-extra
 freeipa-client
 mc
-vlc
 hexchat
 mumble
-kodi
-kodi-pvr-iptvsimple
 %end
 
 %post
@@ -72,6 +69,9 @@ dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 # Install libdvdcss to play DVDs
 dnf install -y rpmfusion-free-release-tainted
 dnf install -y libdvdcss
+
+# Install mulimedia software
+dnf install -y kodi kodi-pvr-iptvsimple v
 
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go

@@ -12,12 +12,6 @@ rootpw --lock
 # Network installation repos
 url --url="https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os"
 repo --name=updates
-repo --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-%releasever&arch=$basearch
-repo --name=rpmfusion-free-updates --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
-repo --name=rpmfusion-nonfree --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-$releasever&arch=$basearch
-repo --name=rpmfusion-nonfree-updates --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
-repo --name=rpmfusion-free-tainted --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-tainted-$releasever&arch=$basearch
-repo --name=rpmfusion-nonfree-tainted --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-tainted-$releasever&arch=$basearch
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -65,11 +59,8 @@ git2cl
 pre-commit
 gitg
 mc
-vlc
 hexchat
 mumble
-kodi
-kodi-pvr-iptvsimple
 %end
 
 %post
@@ -95,6 +86,13 @@ EOF
 
 # Install VScode
 dnf install -y code
+
+# Install libdvdcss to play DVDs
+dnf install -y rpmfusion-free-release-tainted
+dnf install -y libdvdcss
+
+# Install mulimedia software
+dnf install -y kodi kodi-pvr-iptvsimple vlc
 
 # Set polkit rules for domain clients 
 cat > /etc/polkit-1/rules.d/40-freeipa.rules  <<EOF
