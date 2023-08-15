@@ -66,7 +66,7 @@ sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de
 systemctl enable cockpit.socket
 
 # Set polkit rules for domain server
-cat > /etc/polkit-1/rules.d/40-freeipa.rules  <<EOF
+cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];

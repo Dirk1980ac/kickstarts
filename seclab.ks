@@ -56,9 +56,13 @@ gnome-keyring-pam
 %post
 #Install RPMFusion
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+# Update multimedia packages if needed
 dnf groupupdate core -y
 dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
 dnf groupupdate -y sound-and-video
+
+# Support hardware with proprietary firmware
 dnf install -y rpmfusion-nonfree-release-tainted
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
@@ -72,11 +76,9 @@ dnf install -y yggdrasil
 # Insert somme public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
 
-
-
 # Set polkit rules for domain clients 
 # Domain admins can administer this machine
-cat > /etc/polkit-1/rules.d/40-freeipa.rules  <<EOF
+cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
@@ -184,7 +186,5 @@ polkit.addRule(function(action, subject) {
         }
 });
 EOF
-
-
 %end
 

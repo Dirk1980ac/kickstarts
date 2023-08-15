@@ -83,7 +83,7 @@ dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
 # Install repository for Visual Studio Code Community Edition
 rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cat > /etc/yum.repos.d/vscode.repo <<EOF
+cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 [code]
 name=Visual Studio Code
 baseurl=https://packages.microsoft.com/yumrepos/vscode

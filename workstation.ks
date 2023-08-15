@@ -84,7 +84,7 @@ sed -ibak 's/\[\]/\[\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:4
 # Simply remove the following block if you do not use FreeIPA in your network.
 # Set polkit rules for domain clients 
 # FreeIPA admins can do admin tasks on this machine
-cat > /etc/polkit-1/rules.d/40-freeipa.rules  <<EOF
+cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
