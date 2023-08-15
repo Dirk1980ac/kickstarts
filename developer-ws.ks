@@ -12,10 +12,12 @@ rootpw --lock
 # Network installation repos
 url --url="https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os"
 repo --name=updates
-repo --name=rpmfusion-free --baseurl=http://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
-repo --name=rpmfusion-free-updates --baseurl=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
-repo --name=rpmfusion-nonfree --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
-repo --name=rpmfusion-nonfree-updates --baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
+repo --name=rpmfusion-free --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
+repo --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
+repo --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
+repo --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
+repo --name=rpmfusion-free-tainted --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-tainted-$releasever&arch=$basearch
+repo --name=rpmfusion-nonfree-tainted --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-tainted-$releasever&arch=$basearch
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -83,8 +85,7 @@ dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
 # Install repository for Visual Studio Code Community Edition
 rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
-[code]
+cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules[code]
 name=Visual Studio Code
 baseurl=https://packages.microsoft.com/yumrepos/vscode
 enabled=1
