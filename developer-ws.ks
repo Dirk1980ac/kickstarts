@@ -76,7 +76,8 @@ dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
 # Install repository for Visual Studio Code Community Edition
 rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules[code]
+cat << EOF > /etc/yum.repos.d/vscode.repo
+[vscode]
 name=Visual Studio Code
 baseurl=https://packages.microsoft.com/yumrepos/vscode
 enabled=1
@@ -95,7 +96,7 @@ dnf install -y libdvdcss
 dnf install -y kodi kodi-pvr-iptvsimple vlc
 
 # Set polkit rules for domain clients 
-cat > /etc/polkit-1/rules.d/40-freeipa.rules  <<EOF
+cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules[code]
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];

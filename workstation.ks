@@ -71,7 +71,7 @@ dnf install -y rpmfusion-free-release-tainted
 dnf install -y libdvdcss
 
 # Install mulimedia software
-dnf install -y kodi kodi-pvr-iptvsimple v
+dnf install -y kodi kodi-pvr-iptvsimple vlc
 
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
