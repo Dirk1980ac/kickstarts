@@ -62,7 +62,7 @@ dnf groupupdate core -y
 [ $? -ne 0 ] && return 1;
 dnf install -y rpmfusion-nonfree-release-tainted
 [ $? -ne 0 ] && return 1;
-dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+dnf groupupdate multimedia -y --setop="install_weak_deps=False"
 [ $? -ne 0 ] && return 1;
 dnf groupupdate -y sound-and-video
 [ $? -ne 0 ] && return 1;
@@ -202,7 +202,7 @@ dnf install -y yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
 [ $? -ne 0 ] && return 1;
 
-# Insert somme public peers
+# Insert somme public peers for yggdrasil
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
 [ $? -ne 0 ] && return 1;
 %end
