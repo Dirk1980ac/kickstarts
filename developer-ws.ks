@@ -61,21 +61,29 @@ gitg
 mc
 hexchat
 mumble
+zsh
 %end
 
-%post
+%post --erroronfail
 #Install RPMFusion Repositories
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+[ $? -ne 0 ] && return 1;
 dnf groupupdate core -y
+[ $? -ne 0 ] && return 1;
 dnf install -y rpmfusion-nonfree-release-tainted
+[ $? -ne 0 ] && return 1;
 dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+[ $? -ne 0 ] && return 1;
 dnf groupupdate -y sound-and-video
+[ $? -ne 0 ] && return 1;
 
 # Install non-free firmware drivers
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
+[ $? -ne 0 ] && return 1;
 
 # Install repository for Visual Studio Code Community Edition
 rpm --import https://packages.microsoft.com/keys/microsoft.asc
+[ $? -ne 0 ] && return 1;
 cat << EOF > /etc/yum.repos.d/vscode.repo
 [vscode]
 name=Visual Studio Code
@@ -84,16 +92,28 @@ enabled=1
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
+[ $? -ne 0 ] && return 1;
 
 # Install VScode
 dnf install -y code
+[ $? -ne 0 ] && return 1;
 
 # Install libdvdcss to play DVDs
 dnf install -y rpmfusion-free-release-tainted
+[ $? -ne 0 ] && return 1;
 dnf install -y libdvdcss
+[ $? -ne 0 ] && return 1;
 
 # Install mulimedia software
 dnf install -y kodi kodi-pvr-iptvsimple vlc
+[ $? -ne 0 ] && return 1;
+
+# Check and install apropiate hardware codecs at least for AMD/ATI GPU
+lsmod | grep amdgpu
+[ $? -eq 0 ] && \
+    dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld && \
+    dnf swap -< mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+[ $? -ne 0 ] && return 1;
 
 # Set polkit rules for domain clients 
 cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules[code]
@@ -204,17 +224,19 @@ polkit.addRule(function(action, subject) {
         }
 });
 EOF
-
+[ $? -ne 0 ] && return 1;
 
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
+[ $? -ne 0 ] && return 1;
 dnf install -y yggdrasil
-
+[ $? -ne 0 ] && return 1;
 
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
+[ $? -ne 0 ] && return 1;
 
 # Insert somme public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
-
+[ $? -ne 0 ] && return 1;
 %end

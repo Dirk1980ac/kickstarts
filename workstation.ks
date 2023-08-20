@@ -28,6 +28,9 @@ clearpart --none --initlabel
 # Reboot automatically after installation
 reboot --eject
 
+# Disable root user
+rootpw --lock
+
 # System timezone
 timezone Europe/Berlin --utc
 
@@ -44,49 +47,49 @@ chkconfig
 dracut-live
 glibc-all-langpacks
 initscripts
-kernel
-kernel-modules
-kernel-modules-extra
 freeipa-client
 mc
 hexchat
 mumble
+zsh
 %end
 
-%post
-#Install RPMFusion
+%post --erroronfail
+#Install RPMFusion Repositories
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+[ $? -ne 0 ] && return 1;
 dnf groupupdate core -y
-
-# Install codecs
-dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
-dnf groupupdate -y sound-and-video
-
-# Install additional firmware packages
+[ $? -ne 0 ] && return 1;
 dnf install -y rpmfusion-nonfree-release-tainted
+[ $? -ne 0 ] && return 1;
+dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+[ $? -ne 0 ] && return 1;
+dnf groupupdate -y sound-and-video
+[ $? -ne 0 ] && return 1;
+
+# Install non-free firmware drivers
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
+[ $? -ne 0 ] && return 1;
 
 # Install libdvdcss to play DVDs
 dnf install -y rpmfusion-free-release-tainted
+[ $? -ne 0 ] && return 1;
 dnf install -y libdvdcss
+[ $? -ne 0 ] && return 1;
 
 # Install mulimedia software
 dnf install -y kodi kodi-pvr-iptvsimple vlc
+[ $? -ne 0 ] && return 1;
 
-# install yggdrasil
-dnf copr enable -y neilalexander/yggdrasil-go
-dnf install -y yggdrasil
+# Check and install apropiate hardware codecs at least for AMD/ATI GPU
+lsmod | grep amdgpu
+[ $? -eq 0 ] && \
+    dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld && \
+    dnf swap -< mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+[ $? -ne 0 ] && return 1;
 
-# Configure yggdrasil
-/usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
-
-# Insert somme public peers in /etc/yggdrasil.conf
-sed -ibak 's/\[\]/\[\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
-
-# Simply remove the following block if you do not use FreeIPA in your network.
 # Set polkit rules for domain clients 
-# FreeIPA admins can do admin tasks on this machine
-cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
+cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules[code]
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
@@ -194,5 +197,19 @@ polkit.addRule(function(action, subject) {
         }
 });
 EOF
+[ $? -ne 0 ] && return 1;
 
+# install yggdrasil
+dnf copr enable -y neilalexander/yggdrasil-go
+[ $? -ne 0 ] && return 1;
+dnf install -y yggdrasil
+[ $? -ne 0 ] && return 1;
+
+# Configure yggdrasil
+/usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
+[ $? -ne 0 ] && return 1;
+
+# Insert somme public peers
+sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
+[ $? -ne 0 ] && return 1;
 %end

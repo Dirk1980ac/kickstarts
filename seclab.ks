@@ -41,6 +41,7 @@ timezone Europe/Berlin --utc
 @network-server
 @system-tools
 initial-setup
+zsh
 
 # install env-group to resolve RhBug:1891500
 @^xfce-desktop-environment
@@ -55,28 +56,46 @@ security-menus
 gnome-keyring-pam
 %end
 
-%post
+%post --erroronfail
 #Install RPMFusion
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+[ $? -ne 0 ] && return 1;
 
 # Update multimedia packages if needed
 dnf groupupdate core -y
+[ $? -ne 0 ] && return 1;
 dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+[ $? -ne 0 ] && return 1;
 dnf groupupdate -y sound-and-video
+[ $? -ne 0 ] && return 1;
 
 # Support hardware with proprietary firmware
 dnf install -y rpmfusion-nonfree-release-tainted
+[ $? -ne 0 ] && return 1;
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
+[ $? -ne 0 ] && return 1;
+
 
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
+[ $? -ne 0 ] && return 1;
 dnf install -y yggdrasil
+[ $? -ne 0 ] && return 1;
 
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
+[ $? -ne 0 ] && return 1;
 
 # Insert somme public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
+[ $? -ne 0 ] && return 1;
+
+# Check and install apropiate hardware codecs at least for AMD/ATI GPU
+lsmod | grep amdgpu
+[ $? -eq 0 ] && \
+    dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld && \
+    dnf swap -< mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+[ $? -ne 0 ] && return 1;
 
 # Set polkit rules for domain clients 
 # Domain admins can administer this machine
@@ -188,5 +207,6 @@ polkit.addRule(function(action, subject) {
         }
 });
 EOF
+[ $? -ne 0 ] && return 1;
 %end
 

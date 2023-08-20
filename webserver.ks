@@ -44,6 +44,7 @@ httpd
 mariadb-server
 mc
 NetworkManager-tui
+zsh
 %end
 
 # Enable services
@@ -52,24 +53,32 @@ services --enabled=httpd,mariadb,cockpit.socket
 # Firewall settings
 firewall --enable --service=cockpit --service=http --service=https
 
-%post
+%post --erroronfail
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+[ $? -ne 0 ] && return 1;
 dnf groupupdate core -y
+[ $? -ne 0 ] && return 1;
 systemctl enable httpd mariadb
 
 # Install additional firmware packages
 dnf install -y rpmfusion-nonfree-release-tainted
+[ $? -ne 0 ] && return 1;
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
+[ $? -ne 0 ] && return 1;
 
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
+[ $? -ne 0 ] && return 1;
 dnf install -y yggdrasil
+[ $? -ne 0 ] && return 1;
 
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
+[ $? -ne 0 ] && return 1;
 
 # Insert somme public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
+[ $? -ne 0 ] && return 1;
 
 # Set polkit rules for the server
 cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
@@ -180,5 +189,5 @@ polkit.addRule(function(action, subject) {
         }
 });
 EOF
-
+[ $? -ne 0 ] && return 1;
 %end

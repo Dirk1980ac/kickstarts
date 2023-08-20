@@ -40,6 +40,10 @@ You must have enough unpartitioned space on one of your harddisks. Existing part
 
 - For Server variants: The whole installation is done in text mode. **Remember to change the root password!**
 
+## The %post scripts
+
+Be aware: The %post script does not do any error checking at the moment.
+
 ## License
 
 These project is released under the CC0 license. You are free to use, modify and share these files without any limitations.
