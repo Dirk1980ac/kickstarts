@@ -53,27 +53,25 @@ rootpw --iscrypted $6$hqJqmmDJAWWaF5oe$21hb0VS7bmspBD68l1RlzDN8vWSkwDxEGuVrf1aYf
 # Enable services
 services --enabled=cockpit.socket
 
-%post --erroronfail
+%post 
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-[ $? -ne 0 ] && return 1;
+
 dnf copr enable -y neilalexander/yggdrasil-go
-[ $? -ne 0 ] && return 1;
 dnf install -y yggdrasil
-[ $? -ne 0 ] && return 1;
+
 
 # Install additional firmware packages
 dnf install -y rpmfusion-nonfree-release-tainted
-[ $? -ne 0 ] && return 1;
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
-[ $? -ne 0 ] && return 1;
+
 
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
-[ $? -ne 0 ] && return 1;
+
 
 # Insert somme public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
-[ $? -ne 0 ] && return 1;
+
 
 # Set polkit rules for domain server
 cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
@@ -184,5 +182,4 @@ polkit.addRule(function(action, subject) {
         }
 });
 EOF
-[ $? -ne 0 ] && return 1;
 %end
