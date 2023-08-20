@@ -81,13 +81,6 @@ dnf install -y libdvdcss
 dnf install -y kodi kodi-pvr-iptvsimple vlc
 [ $? -ne 0 ] && return 1;
 
-# Check and install apropiate hardware codecs at least for AMD/ATI GPU
-lsmod | grep amdgpu
-[ $? -eq 0 ] && \
-    dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld && \
-    dnf swap -< mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-[ $? -ne 0 ] && return 1;
-
 # Set polkit rules for domain clients 
 cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules[code]
 // Domain admins are also machine admins
