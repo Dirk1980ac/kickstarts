@@ -58,13 +58,13 @@ zsh
 #Install RPMFusion Repositories
 dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 [ $? -ne 0 ] && return 1;
-dnf groupupdate core -y
+dnf groupupdate core -y  --allowerasing
 [ $? -ne 0 ] && return 1;
 dnf install -y rpmfusion-nonfree-release-tainted
 [ $? -ne 0 ] && return 1;
-dnf groupupdate multimedia -y --setop="install_weak_deps=False"
+dnf groupupdate multimedia -y --setop="install_weak_deps=False" --allowerasing
 [ $? -ne 0 ] && return 1;
-dnf groupupdate -y sound-and-video
+dnf groupupdate -y sound-and-video  --allowerasing
 [ $? -ne 0 ] && return 1;
 
 # Install non-free firmware drivers
@@ -74,11 +74,11 @@ dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 # Install libdvdcss to play DVDs
 dnf install -y rpmfusion-free-release-tainted
 [ $? -ne 0 ] && return 1;
-dnf install -y libdvdcss
+dnf install -y libdvdcss  --allowerasing
 [ $? -ne 0 ] && return 1;
 
 # Install mulimedia software
-dnf install -y kodi kodi-pvr-iptvsimple vlc
+dnf install -y kodi kodi-pvr-iptvsimple vlc  --allowerasing
 [ $? -ne 0 ] && return 1;
 
 # Set polkit rules for domain clients 
