@@ -77,7 +77,7 @@ dnf install -y yggdrasil
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
 
-# Insert somme public peers
+# Insert some public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
 
 # Set polkit rules for domain clients 

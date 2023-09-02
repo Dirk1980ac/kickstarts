@@ -52,6 +52,7 @@ mc
 hexchat
 mumble
 zsh
+-kernel-debug
 %end
 
 %post 
@@ -73,7 +74,7 @@ dnf install -y libdvdcss  --allowerasing
 dnf install -y kodi kodi-pvr-iptvsimple vlc  --allowerasing
 
 # Set polkit rules for domain clients 
-cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules[code]
+cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
@@ -189,7 +190,7 @@ dnf install -y yggdrasil
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
 
-# Insert somme public peers for yggdrasil
+# Insert some public peers for yggdrasil
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
 
 %end
