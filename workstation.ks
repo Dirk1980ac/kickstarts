@@ -183,6 +183,9 @@ polkit.addRule(function(action, subject) {
 });
 EOF
 
+# Enable USB FIDO2 token to be used with sssd.
+setsebool -P sssd_use_usb 1
+
 # install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil

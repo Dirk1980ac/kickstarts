@@ -93,6 +93,9 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
+# Enable USB FIDO2 token to be used with sssd.
+setsebool -P sssd_use_usb 1
+
 # Install VScode
 dnf install -y code
 

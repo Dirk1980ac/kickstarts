@@ -80,6 +80,9 @@ dnf install -y yggdrasil
 # Insert some public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
 
+# Enable USB FIDO2 token to be used with sssd.
+setsebool -P sssd_use_usb 1
+
 # Set polkit rules for domain clients 
 # Domain admins can administer this machine
 cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
