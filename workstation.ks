@@ -74,7 +74,7 @@ dnf install -y libdvdcss  --allowerasing
 dnf install -y kodi kodi-pvr-iptvsimple vlc  --allowerasing
 
 # Set polkit rules for domain clients 
-cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules
+cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
@@ -195,5 +195,26 @@ dnf install -y yggdrasil
 
 # Insert some public peers for yggdrasil
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
+
+# Lock screen on yubikey removal
+cat << EOF > /usr/local/bin/lockscreen.sh
+#!/bin/sh
+#Author: https://gist.github.com/jhass/070207e9d22b314d9992
+
+for bus in /run/user/*/bus; do
+    uid=$(basename $(dirname $bus))
+    if [ $uid -ge 1000 ]; then
+	user=$(id -un $uid)
+	export DBUS_SESSION_BUS_ADDRESS=unix:path=$bus
+	if su -c 'dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply  /org/freedesktop/DBus org.freedesktop.DBus.ListNames' $user | grep org.gnome.ScreenSaver; then
+	    su -c 'dbus-send --session --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock' $user
+	fi
+    fi
+done
+EOF
+
+cat << EOF > /etc/udev/rules.d/20-yubikey.rules
+ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_MODEL_ID}=="0407", ENV{ID_VENDOR_ID}=="1050", RUN+="/usr/local/bin/lockscreen.sh"
+EOF
 
 %end
