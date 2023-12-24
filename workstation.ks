@@ -43,7 +43,6 @@ aajohan-comfortaa-fonts
 anaconda
 anaconda-install-env-deps
 anaconda-live
-chkconfig
 dracut-live
 glibc-all-langpacks
 initscripts
@@ -52,7 +51,6 @@ mc
 hexchat
 mumble
 zsh
--kernel-debug
 %end
 
 %post 
@@ -178,6 +176,38 @@ polkit.addRule(function(action, subject) {
             subject.local &&
             subject.active &&
             subject.isInGroup ("admins") || subject.isInGroup ("wheel")) {
+            return polkit.Result.YES;
+        }
+});
+
+// Allow pkexec for the admins group of FreeIPA
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.fedoraproject.config.language.pkexec.run" &&
+        subject.isInGroup("admin")) {
+        return polkit.Result.YES;
+    }
+});
+
+// Allow NetworkNabager-Settings for the admins group of FreeIPA
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.NetworkManager.checkpoint-rollback" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-connectivity-check" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-network" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-statistics" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-wifi" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-wimax" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-wwan" ||
+        action.id == "org.freedesktop.NetworkManager.network-control" ||
+        action.id == "org.freedesktop.NetworkManager.reload" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.global-dns" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.hostname" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.own" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.system" ||
+        action.id == "org.freedesktop.NetworkManager.sleep-wake" ||
+        action.id == "org.freedesktop.NetworkManager.wifi.scan" ||
+        action.id == "org.freedesktop.NetworkManager.wifi.share.open" ||
+        action.id == "org.freedesktop.NetworkManager.wifi.share.protected" &&
+        subject.isInGroup("admin")) {
             return polkit.Result.YES;
         }
 });

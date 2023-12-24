@@ -214,6 +214,38 @@ polkit.addRule(function(action, subject) {
             return polkit.Result.YES;
         }
 });
+
+// Allow pkexec for the admins group of FreeIPA
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.fedoraproject.config.language.pkexec.run" &&
+        subject.isInGroup("admin")) {
+        return polkit.Result.YES;
+    }
+});
+
+// Allow NetworkNabager-Settings for the admins group of FreeIPA
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.NetworkManager.checkpoint-rollback" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-connectivity-check" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-network" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-statistics" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-wifi" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-wimax" ||
+        action.id == "org.freedesktop.NetworkManager.enable-disable-wwan" ||
+        action.id == "org.freedesktop.NetworkManager.network-control" ||
+        action.id == "org.freedesktop.NetworkManager.reload" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.global-dns" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.hostname" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.own" ||
+        action.id == "org.freedesktop.NetworkManager.settings.modify.system" ||
+        action.id == "org.freedesktop.NetworkManager.sleep-wake" ||
+        action.id == "org.freedesktop.NetworkManager.wifi.scan" ||
+        action.id == "org.freedesktop.NetworkManager.wifi.share.open" ||
+        action.id == "org.freedesktop.NetworkManager.wifi.share.protected" &&
+        subject.isInGroup("admin")) {
+            return polkit.Result.YES;
+        }
+});
 EOF
 
 # install yggdrasil
@@ -228,6 +260,7 @@ dnf install -y yggdrasil
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
 
 # Lock screen on yubikey removal
+# Comment this block if you don't want this behaviour
 cat << EOF > /usr/local/bin/lockscreen.sh
 #!/bin/sh
 #Author: https://gist.github.com/jhass/070207e9d22b314d9992
