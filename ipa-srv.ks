@@ -1,5 +1,5 @@
 # Use graphical install ?
-text
+graphical
 
 # Keyboard layouts
 keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
