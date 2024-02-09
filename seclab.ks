@@ -9,12 +9,10 @@ lang de_DE.UTF-8
 # Network installation repos
 url --url="https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os"
 repo --name=updates
-repo --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-%releasever&arch=$basearch
-repo --name=rpmfusion-free-updates --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
-repo --name=rpmfusion-nonfree --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-$releasever&arch=$basearch
-repo --name=rpmfusion-nonfree-updates --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
-repo --name=rpmfusion-free-tainted --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-tainted-$releasever&arch=$basearch
-repo --name=rpmfusion-nonfree-tainted --mirrorlist=https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-tainted-$releasever&arch=$basearch
+repo --install --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/%releasever/$basearch
+repo --install --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
+repo --install --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
+repo --install --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -57,9 +55,6 @@ gnome-keyring-pam
 %end
 
 %post 
-#Install RPMFusion
-dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
 # Update multimedia packages if needed
 dnf groupupdate core -y
 dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
@@ -246,6 +241,5 @@ EOF
 cat << EOF > /etc/udev/rules.d/20-yubikey.rules
 ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_MODEL_ID}=="0407", ENV{ID_VENDOR_ID}=="1050", RUN+="/usr/local/bin/lockscreen.sh"
 EOF
-
 %end
 

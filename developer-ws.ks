@@ -12,6 +12,11 @@ rootpw --lock
 # Network installation repos
 url --url="https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os"
 repo --name=updates
+repo --install --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/%releasever/$basearch
+repo --install --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
+repo --install --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
+repo --install --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
+repo --install --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
