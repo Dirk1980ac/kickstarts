@@ -12,11 +12,11 @@ rootpw --lock
 # Network installation repos
 repo --name=fedora --cost=0 --baseurl=https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os 
 repo --name=updates --cost=0
-repo --install --cost=2 --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
-repo --install --cost=2 --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
-repo --install --cost=2 --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
-repo --install --cost=2 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
-repo --install --cost=1 --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
+repo --cost=2 --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
+repo --cost=2 --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
+repo --cost=2 --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
+repo --cost=2 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
+repo --cost=1 --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -67,39 +67,36 @@ mc
 hexchat
 mumble
 zsh
+code
+kodi
+kodi-pvr-iptvsimple
+vlc
 %end
 
 %post
-# Install non-free firmware drivers
-dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
 
-# Install repository for Visual Studio Code Community Edition
-rpm --import https://packages.microsoft.com/keys/microsoft.asc
-
-cat << EOF > /etc/yum.repos.d/vscode.repo
-[vscode]
-name=Visual Studio Code
-baseurl=https://packages.microsoft.com/yumrepos/vscode
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-EOF
 
 # Enable USB FIDO2 token to be used with sssd.
 setsebool -P sssd_use_usb 1
 
-# Install VScode
-dnf install -y code
-
-# Install libdvdcss to play DVDs
+# Install non-free firmwares
+dnf install -y rpmfusion-free-release
+dnf install -y rpmfusion-nonfree-release
 dnf install -y rpmfusion-free-release-tainted
+dnf install -y repo=rpmfusion-nonfree-tainted
+dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 dnf install -y libdvdcss
 
-# Install mulimedia software
-dnf install -y kodi kodi-pvr-iptvsimple vlc
+# Set SSHd config hardening overrides
+cat << EOF > /etc/ssh/sshd_config.d/00-0local.conf
+PasswordAuthentication no
+AllowAgentForwarding yes
+GSSAPICleanupCredentials yes
+EOF
 
-# Set polkit rules for domain clients 
+
+# Set polkit rules for domain clients, - Do we still need allof them?
 cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
@@ -145,7 +142,6 @@ polkit.addRule(function(action, subject) {
         }
     }
 );
-
 
 polkit.addRule(function(action, subject) {
     if ((action.id === "org.freedesktop.bolt.enroll" ||
@@ -245,15 +241,12 @@ EOF
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
 
-
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
-
-# Insert some public peers
 sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
 
 # Lock screen on yubikey removal
-# Comment this block if you don't want this behaviour
+# Comment out this block if you don't want this behaviour
 cat << EOF > /usr/local/bin/lockscreen.sh
 #!/bin/sh
 #Author: https://gist.github.com/jhass/070207e9d22b314d9992
@@ -270,8 +263,8 @@ for bus in /run/user/*/bus; do
 done
 EOF
 
+# UDEV rules to trigger the screen locking script
 cat << EOF > /etc/udev/rules.d/20-yubikey.rules
 ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_MODEL_ID}=="0407", ENV{ID_VENDOR_ID}=="1050", RUN+="/usr/local/bin/lockscreen.sh"
 EOF
-
 %end
