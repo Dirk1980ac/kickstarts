@@ -10,13 +10,13 @@ lang de_DE.UTF-8
 rootpw --lock
 
 # Network installation repos
-url --url="https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os"
-repo --name=updates
-repo --install --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
-repo --install --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
-repo --install --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
-repo --install --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
-repo --install --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
+repo --name=fedora --cost=0 --baseurl=https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os 
+repo --name=updates --cost=0
+repo --install --cost=2 --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
+repo --install --cost=2 --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
+repo --install --cost=2 --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
+repo --install --cost=2 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
+repo --install --cost=1 --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -70,18 +70,6 @@ zsh
 %end
 
 %post
-#Install RPMFusion Repositories
-dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-dnf groupupdate core -y
-
-dnf install -y rpmfusion-nonfree-release-tainted
-
-dnf groupupdate multimedia -y --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
-
-dnf groupupdate -y sound-and-video
-
-
 # Install non-free firmware drivers
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
