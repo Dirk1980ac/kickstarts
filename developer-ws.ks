@@ -10,21 +10,20 @@ lang de_DE.UTF-8
 rootpw --lock
 
 # Network installation repos
-repo --name=fedora --cost=0 --baseurl=https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os 
-repo --name=updates --cost=0
+url --url="https://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os"
+repo --name=updates
 repo --cost=2 --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
 repo --cost=2 --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
 repo --cost=2 --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
 repo --cost=2 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
-repo --cost=1 --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
+repo --cost=1 --install --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
 
-# Generated using Blivet version 3.4.3
-# ignoredisk --only-use=nvme0n1
 autopart --type=btrfs
-# Partition clearing information
+
+# Partition clearing?
 clearpart --none --initlabel
 
 # Reboot automatically after installation
@@ -63,6 +62,7 @@ git
 git2cl
 pre-commit
 gitg
+-cockpit
 mc
 hexchat
 mumble
@@ -74,9 +74,6 @@ vlc
 %end
 
 %post
-
-
-
 # Enable USB FIDO2 token to be used with sssd.
 setsebool -P sssd_use_usb 1
 
@@ -95,20 +92,20 @@ AllowAgentForwarding yes
 GSSAPICleanupCredentials yes
 EOF
 
-
-# Set polkit rules for domain clients, - Do we still need allof them?
+# Set polkit rules for domain clients.
 cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
 });
 
-// Allow any user in the 'libvirt' and the 'admins' group to connect to system
-// libvirtd without entering a password.
+// Allow any user in the 'libvirt' , 'vmadmins' and the 'admins' group to
+// connect to system libvirtd without entering a password.
 polkit.addRule(function(action, subject) {
     if (action.id == "org.libvirt.unix.manage" &&
         subject.isInGroup("libvirt") ||
-        subject.isInGroup("admins")) {
+        subject.isInGroup("admins") ||
+        subject.isInGroup("vmadmins")) {
         return polkit.Result.YES;
     }
 });
@@ -126,11 +123,10 @@ polkit.addRule(function(action, subject) {
 	    }
 });
 
-// firewalld authorizations/policy for the wheel group.
+// firewalld authorizations/policy for the admins group.
 //
-// Allow users in the wheel group to use firewalld without being 
+// Allow users in the admins group to use firewalld without being 
 // interrupted by a password dialog
-
 polkit.addRule(function(action, subject) {
     if ((action.id == "org.fedoraproject.FirewallD1.config" ||
         action.id == "org.fedoraproject.FirewallD1.direct" ||
@@ -204,14 +200,6 @@ polkit.addRule(function(action, subject) {
         }
 });
 
-// Allow pkexec for the admins group of FreeIPA
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.fedoraproject.config.language.pkexec.run" &&
-        subject.isInGroup("admin")) {
-        return polkit.Result.YES;
-    }
-});
-
 // Allow NetworkNabager-Settings for the admins group of FreeIPA
 polkit.addRule(function(action, subject) {
     if (action.id == "org.freedesktop.NetworkManager.checkpoint-rollback" ||
@@ -243,7 +231,7 @@ dnf install -y yggdrasil
 
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
-sed -ibak 's/\[\]/\  [\n    tls:\/\/ygg.mkg20001.io:443\n    tls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\n  \]/' /etc/yggdrasil.conf
+sed -ibak 's/\[\]/\[\ntls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\ntls://ygg.yt:443\ntls://ygg.mkg20001.io:443\ntls://ygg-uplink.thingylabs.io:443\ntls://cowboy.supergay.network:443\n    tls://supergay.network:443\n    tls://corn.chowder.land:443    \ntls://[2a03:3b40:fe:ab::1]:993\ntls://37.205.14.171:993\ntls://102.223.180.74:993\nquic://193.93.119.42:1443\n\]/' /etc/yggdrasil.conf
 
 # Lock screen on yubikey removal
 # Comment out this block if you don't want this behaviour
