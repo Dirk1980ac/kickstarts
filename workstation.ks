@@ -216,7 +216,7 @@ dnf install -y yggdrasil
 
 # Configure yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
-sed -ibak 's/\[\]/\[\ntls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\ntls://ygg.yt:443\ntls://ygg.mkg20001.io:443\ntls://ygg-uplink.thingylabs.io:443\ntls://cowboy.supergay.network:443\n    tls://supergay.network:443\n    tls://corn.chowder.land:443    \ntls://[2a03:3b40:fe:ab::1]:993\ntls://37.205.14.171:993\ntls://102.223.180.74:993\nquic://193.93.119.42:1443\n\]/' /etc/yggdrasil.conf
+sed -ibak 's/\[\]/\ [\ntls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\ntls://ygg.yt:443\ntls://ygg.mkg20001.io:443\ntls://ygg-uplink.thingylabs.io:443\ntls://cowboy.supergay.network:443\n    tls://supergay.network:443\n    tls://corn.chowder.land:443    \ntls://[2a03:3b40:fe:ab::1]:993\ntls://37.205.14.171:993\ntls://102.223.180.74:993\nquic://193.93.119.42:1443\n\]/' /etc/yggdrasil.conf
 
 # Lock screen on yubikey removal
 # Comment out this block if you don't want this behaviour

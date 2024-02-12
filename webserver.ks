@@ -13,6 +13,9 @@ repo --cost=2 --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/f
 repo --cost=2 --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
 repo --cost=2 --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
 repo --cost=2 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
+repo --cost=2 --name=rpmfusion-nonfree-tainted --baseurl=http://download1.rpmfusion.org/nonfree/fedora/tainted/$releasever/$basearch/
+repo --cost=2 --name=rpmfusion-ree-tainted --baseurl=http://download1.rpmfusion.org/free/fedora/tainted/$releasever/$basearch/
+repo  --name=fedora-cisco-openh264 --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
 
 # Generated using Blivet version 3.7.1
 # ignoredisk --only-use=vda
@@ -44,6 +47,14 @@ mariadb-server
 mc
 NetworkManager-tui
 zsh
+rpmfusion-free-appstream-data
+rpmfusion-free-release
+rpmfusion-free-release-tainted
+rpmfusion-nonfree-appstream-data
+rpmfusion-nonfree-release
+rpmfusion-nonfree-release-tainted
+libdvdcss
+*-firmware
 %end
 
 # Enable services
@@ -60,7 +71,7 @@ dnf install -y yggdrasil
 /usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
 
 # Insert some public peers
-sed -ibak 's/\[\]/\[\ntls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\ntls://ygg.yt:443\ntls://ygg.mkg20001.io:443\ntls://ygg-uplink.thingylabs.io:443\ntls://cowboy.supergay.network:443\n    tls://supergay.network:443\n    tls://corn.chowder.land:443    \ntls://[2a03:3b40:fe:ab::1]:993\ntls://37.205.14.171:993\ntls://102.223.180.74:993\nquic://193.93.119.42:1443\n\]/' /etc/yggdrasil.conf
+sed -ibak 's/\[\]/\ [\ntls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\ntls://ygg.yt:443\ntls://ygg.mkg20001.io:443\ntls://ygg-uplink.thingylabs.io:443\ntls://cowboy.supergay.network:443\n    tls://supergay.network:443\n    tls://corn.chowder.land:443    \ntls://[2a03:3b40:fe:ab::1]:993\ntls://37.205.14.171:993\ntls://102.223.180.74:993\nquic://193.93.119.42:1443\n\]/' /etc/yggdrasil.conf
 
 # Install additional firmware packages
 dnf install -y rpmfusion-nonfree-release-tainted
