@@ -23,7 +23,7 @@ firstboot --enable
 # Hard disk partitioning scheme
 autopart --type=btrfs
 # Do not delete existing partitions
-clearpart --none --initlabel
+clearpart --all --initlabel
 
 # Set a bit more meaningful hostname
 network --hostname=andreas-nb
