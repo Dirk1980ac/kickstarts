@@ -52,7 +52,7 @@ glibc-all-langpacks
 initscripts
 kernel
 kernel-modules
-kernel-moduley-extra
+kernel-modules-extra
 # Do not install 'kernel-debug' package
 -kernel-*debug
 # Avoid errors when using cockpit-client for remote access
