@@ -139,4 +139,8 @@ ignore-auto-dns=true
 ip6-privacy=2
 EOF
 
+# Disable auto dns for existing connection enp3s0
+nmcli connection modify enp3s0 ipv4.ignore-auto-dns true
+nmcli connection modify enp3s0 ipv6.ignore-auto-dns true
+
 %end
