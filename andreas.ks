@@ -3,6 +3,7 @@ graphical
 
 # Keyboard layouts
 keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
+
 # System language
 lang de_DE.UTF-8
 
@@ -22,6 +23,7 @@ firstboot --disable
 
 # Hard disk partitioning scheme
 autopart --type=btrfs
+
 # Do not delete existing partitions
 clearpart --all --initlabel
 
@@ -43,33 +45,38 @@ firewall --enable --service=ssh --service=dhcpv6-client --service=mdns
 # Enable services
 services --enabled=sshd,fail2ban
 
-# configure User
+# Configure User
 user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
 
 %packages
 # Mandatory packages
 @^workstation-product-environment
-@anaconda-tools
-aajohan-comfortaa-fonts
 glibc-all-langpacks
 initscripts
-# Do not install 'kernel-debug' package
+
+# Do not install kernel debug packages and install default Kernel
 -kernel-*debug
-# Install default Kernel
 kernel
 kernel-modules
 kernel-modules-extra
+
 # Avoid errors when using cockpit-client for remote access
 # so do not install a local cockpit server
 -cockpit
-# For easier remote file browsing
+
+# Usefull packages
 mc
+NetworkManager-tui
+
 # Device firmwares
 *-firmware'
+
 # Fail2Ban for ssh
 fail2ban
+
 # Add DVD support
 libdvdcss
+
 # Andreas wishlist
 foliate
 vlc
@@ -102,7 +109,7 @@ dnf install -y yggdrasil
 # Configure yggdrasil
 /usr/bin/yggdrasil -genconf -json > /etc/yggdrasil.generated.conf
 jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:443","tls://ygg-uplink.thingylabs.io:443","tls://supergay.network:443","tls://[2a03:3b40:fe:ab::1]:993","tls://37.205.14.171:993"]' /etc/yggdrasil.generated.conf > /etc/yggdrasil.conf
-systemctl enable --now yggdrasil
+systemctl enable yggdrasil
 
 # Add a firewall zone for the yggdrasil network and only
 # allow ssh for this zone.
@@ -128,6 +135,7 @@ DNS=222:9b9a:73de:5323:1074:29b:e210:1a11
 FallbackDNS=8.8.8.8#dns.google 8.8.4.4#dns.google 2001:4860:4860::8888#dns.google 2001:4860:4860::8844#dns.google 1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com 2606:4700:4700::1111#cloudflare-dns.com 2606:4700:4700::1001#cloudflare-dns.com
 EOF
 
+# Change default network configuration
 cat <<EOF > /etc/NetworkManager/conf.d/00-privacy.conf
 [main]
 hostname-mode=none
