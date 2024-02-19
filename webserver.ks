@@ -30,7 +30,7 @@ timezone Europe/Berlin --utc
 reboot --eject
 
 # Root password
-rootpw --iscrypted $6$hqJqmmDJAWWaF5oe$21hb0VS7bmspBD68l1RlzDN8vWSkwDxEGuVrf1aYf76Df6QuNFEyLc0x6tT9i0TCnBy7FqcjUFJ/1CpWHRaKH0
+rootpw --plaintext rootpass
 
 %packages
 @^server-product-environment
