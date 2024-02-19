@@ -74,9 +74,8 @@ dnf install -y yggdrasil
 dnf install -y rpmfusion-nonfree-release-tainted
 dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 
-# Configure yggdrasil
-/usr/bin/yggdrasil --genconf > /etc/yggdrasil.conf
 
-# Insert some public peers
-sed -ibak 's/\[\]/\ [\ntls:\/\/vpn.ltha.de:443?key=0000006149970f245e6cec43664bce203f2514b60a153e194f31e2b229a1339d\ntls://ygg.yt:443\ntls://ygg.mkg20001.io:443\ntls://ygg-uplink.thingylabs.io:443\ntls://cowboy.supergay.network:443\n    tls://supergay.network:443\n    tls://corn.chowder.land:443    \ntls://[2a03:3b40:fe:ab::1]:993\ntls://37.205.14.171:993\ntls://102.223.180.74:993\nquic://193.93.119.42:1443\n\]/' /etc/yggdrasil.conf
+# Configure yggdrasil
+/usr/bin/yggdrasil -genconf -json > /etc/yggdrasil.generated.conf
+jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:443","tls://ygg-uplink.thingylabs.io:443","tls://supergay.network:443","tls://[2a03:3b40:fe:ab::1]:993","tls://37.205.14.171:993"]' /etc/yggdrasil.generated.conf > /etc/yggdrasil.conf
 %end
