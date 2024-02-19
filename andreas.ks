@@ -18,7 +18,7 @@ repo --cost=0 --name=rpmfusion-free-tainted --baseurl=http://download1.rpmfusion
 repo  --name=fedora-cisco-openh264 --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
 
 # Run the Setup Agent on first boot
-firstboot --enable
+firstboot --disable
 
 # Hard disk partitioning scheme
 autopart --type=btrfs
@@ -42,6 +42,9 @@ firewall --enable --service=ssh --service=dhcpv6-client --service=mdns
 
 # Enable services
 services --enabled=sshd,fail2ban
+
+# configure User
+user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
 
 %packages
 # Mandatory packages
@@ -145,5 +148,4 @@ EOF
 # Disable auto dns for existing connection enp3s0
 nmcli connection modify enp3s0 ipv4.ignore-auto-dns true
 nmcli connection modify enp3s0 ipv6.ignore-auto-dns true
-
 %end
