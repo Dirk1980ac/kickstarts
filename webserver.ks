@@ -61,7 +61,7 @@ libdvdcss
 %include /tmp/pre-hostname
 
 # Enable services
-services --enabled=httpd,mariadb,cockpit.socket
+services --enabled=httpd,mariadb
 
 # Firewall settings
 firewall --enable --service=http --service=https
