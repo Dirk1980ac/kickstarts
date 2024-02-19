@@ -53,16 +53,19 @@ user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video --iscr
 aajohan-comfortaa-fonts
 glibc-all-langpacks
 initscripts
+# Do not install 'kernel-debug' package
+-kernel-*debug
+# Install default Kernel
 kernel
 kernel-modules
 kernel-modules-extra
-# Do not install 'kernel-debug' package
--kernel-*debug
 # Avoid errors when using cockpit-client for remote access
 # so do not install a local cockpit server
 -cockpit
 # For easier remote file browsing
 mc
+# Device firmwares
+*-firmware'
 # Fail2Ban for ssh
 fail2ban
 # Add DVD support
@@ -88,13 +91,13 @@ dnf install -y rpmfusion-nonfree-release
 dnf install -y rpmfusion-free-release-tainted
 dnf install -y repo=rpmfusion-nonfree-tainted
 
-# Install non-free firmwares
-dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
+# Set AMD specific packages for Multimedia
+dnf swap mesa-va-drivers mesa-va-drivers-freeworld
+dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
 # Install configure and enable yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
-
 
 # Configure yggdrasil
 /usr/bin/yggdrasil -genconf -json > /etc/yggdrasil.generated.conf
