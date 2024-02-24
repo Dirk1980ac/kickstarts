@@ -43,47 +43,44 @@ timezone Europe/Berlin --utc
 firewall --enable --service=ssh --service=dhcpv6-client --service=mdns
 
 # Enable services
-services --enabled=sshd,fail2ban
+services --enabled=sshd,fail2ban,dnf-automatic-install.timer
 
 # Configure User
 user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
+sshkey --username=andreas  "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAokmKhXPt5UBkmgc55RmcvhCVpo8B9FgMaDhgOlQvzbAAAAD3NzaDpkZ290dHNjaGFsaw=="
 
 %packages
 # Mandatory packages
 @^workstation-product-environment
 glibc-all-langpacks
 initscripts
-
 # Do not install kernel debug packages and install default Kernel
 -kernel-*debug
 kernel
 kernel-modules
 kernel-modules-extra
-
 # Avoid errors when using cockpit-client for remote access
 # so do not install a local cockpit server
 -cockpit
-
 # Usefull packages
 mc
 NetworkManager-tui
-
 # Device firmwares
 *-firmware'
-
 # Fail2Ban for ssh
 fail2ban
-
 # Add DVD support
 libdvdcss
-
+# Automatic system uodates
+dnf-automatic
 # Andreas wishlist
+gnome-tweaks
+gnome-extensions-app
 foliate
 vlc
 gnucash
 virt-manager
 calibre
-gnome-tweaks
 filezilla
 video-downloader
 telegram-desktop
@@ -102,7 +99,7 @@ dnf install -y repo=rpmfusion-nonfree-tainted
 dnf swap mesa-va-drivers mesa-va-drivers-freeworld
 dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
-# Install configure and enable yggdrasil
+# Install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
 dnf install -y yggdrasil
 
@@ -113,7 +110,7 @@ systemctl enable yggdrasil
 
 # Add a firewall zone for the yggdrasil network and only
 # allow ssh for this zone.
-# This is not possible with the kickstart 'firewall' directive
+# Unfortunately this is not possible with the kickstart 'firewall' directive
 firewall-cmd --permanent --new-zone=yggdrasil
 firewall-cmd --permanent --zone=yggdrasil --add-interface=tun0
 firewall-cmd --permanent --zone=yggdrasil --add-service=ssh
@@ -135,7 +132,11 @@ DNS=222:9b9a:73de:5323:1074:29b:e210:1a11
 FallbackDNS=8.8.8.8#dns.google 8.8.4.4#dns.google 2001:4860:4860::8888#dns.google 2001:4860:4860::8844#dns.google 1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com 2606:4700:4700::1111#cloudflare-dns.com 2606:4700:4700::1001#cloudflare-dns.com
 EOF
 
-# Change default network configuration
+# Disable auto dns for existing connection enp3s0
+nmcli connection modify enp3s0 ipv4.ignore-auto-dns true
+nmcli connection modify enp3s0 ipv6.ignore-auto-dns true
+
+# Change default network options
 cat <<EOF > /etc/NetworkManager/conf.d/00-privacy.conf
 [main]
 hostname-mode=none
@@ -155,8 +156,4 @@ addr-gen-mode=stable-privacy
 ignore-auto-dns=true
 ip6-privacy=2
 EOF
-
-# Disable auto dns for existing connection enp3s0
-nmcli connection modify enp3s0 ipv4.ignore-auto-dns true
-nmcli connection modify enp3s0 ipv6.ignore-auto-dns true
 %end
