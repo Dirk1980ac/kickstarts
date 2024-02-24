@@ -66,7 +66,7 @@ kernel-modules-extra
 mc
 NetworkManager-tui
 # Device firmwares
-*-firmware'
+*-firmware
 # Fail2Ban for ssh
 fail2ban
 # Add DVD support
