@@ -96,8 +96,8 @@ dnf install -y rpmfusion-free-release-tainted
 dnf install -y repo=rpmfusion-nonfree-tainted
 
 # Set AMD specific packages for Multimedia
-dnf swap mesa-va-drivers mesa-va-drivers-freeworld
-dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
 # Install yggdrasil
 dnf copr enable -y neilalexander/yggdrasil-go
