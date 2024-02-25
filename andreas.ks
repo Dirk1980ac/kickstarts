@@ -87,15 +87,13 @@ video-downloader
 telegram-desktop
 digikam
 smplayer
+rpmfusion-free-release
+rpmfusion-nonfree-release
+rpmfusion-free-release-tainted
+rpmfusion-nonfree-tainted
 %end
 
 %post 
-# Install RPMFusion repo packages for later use
-dnf install -y rpmfusion-free-release
-dnf install -y rpmfusion-nonfree-release
-dnf install -y rpmfusion-free-release-tainted
-dnf install -y repo=rpmfusion-nonfree-tainted
-
 # Set AMD specific packages for Multimedia
 dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
 dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
@@ -109,9 +107,8 @@ dnf install -y yggdrasil
 jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:443","tls://ygg-uplink.thingylabs.io:443","tls://supergay.network:443","tls://[2a03:3b40:fe:ab::1]:993","tls://37.205.14.171:993"]' /etc/yggdrasil.generated.conf > /etc/yggdrasil.conf
 systemctl enable yggdrasil
 
-# Add a firewall zone for the yggdrasil network and only
-# allow ssh for this zone.
-# Unfortunately this is not possible with the kickstart 'firewall' directive
+# Add a firewall zone for the yggdrasil network and only allow ssh for this
+# zone which Unfortunately is not possible with the kickstart 'firewall' directive
 firewall-cmd --permanent --new-zone=yggdrasil
 firewall-cmd --permanent --zone=yggdrasil --add-interface=tun0
 firewall-cmd --permanent --zone=yggdrasil --add-service=ssh
@@ -134,6 +131,7 @@ FallbackDNS=8.8.8.8#dns.google 8.8.4.4#dns.google 2001:4860:4860::8888#dns.googl
 EOF
 
 # Disable auto dns for existing connection enp3s0
+# FIXME: This dows not work, at least sometimes! - WHY?
 nmcli connection modify enp3s0 ipv4.ignore-auto-dns true
 nmcli connection modify enp3s0 ipv6.ignore-auto-dns true
 
