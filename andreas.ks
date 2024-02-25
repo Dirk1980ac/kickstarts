@@ -1,6 +1,6 @@
 # Installation mode
 graphical
-
+        
 # Keyboard layouts
 keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
 
@@ -65,6 +65,7 @@ kernel-modules-extra
 # Usefull packages
 mc
 NetworkManager-tui
+waypipe
 # Device firmwares
 *-firmware
 # Fail2Ban for ssh
@@ -144,7 +145,7 @@ hostname-mode=none
 [device]
 wifi.scan-rand-mac-address=yes
 wifi.cloned-mac-address=random
-ethernet.cloned-mac-address=random
+ethernet.cloned-mac-address=permanent
 
 [ipv4]
 dhcp-send-hostname=false
