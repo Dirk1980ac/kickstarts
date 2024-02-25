@@ -55,6 +55,7 @@ rpmfusion-nonfree-release
 rpmfusion-nonfree-release-tainted
 libdvdcss
 *-firmware
+waypipe
 
 # install env-group to resolve RhBug:1891500
 @^xfce-desktop-environment

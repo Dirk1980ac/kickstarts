@@ -43,15 +43,14 @@ timezone Europe/Berlin --utc
 
 %packages
 @^workstation-product-environment
-@anaconda-tools
 @domain-client
 @guest-agents
+-kernel-*debug
+-cockpit
 kernel
 kernel-modules
 kernel-moduley-extra
-# Do not install 'kernel-debug' package
--kernel-*debug
--cockpit
+waypipe
 jq
 aajohan-comfortaa-fonts
 anaconda
