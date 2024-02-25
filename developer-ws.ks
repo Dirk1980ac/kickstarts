@@ -84,6 +84,7 @@ rpmfusion-nonfree-release
 rpmfusion-nonfree-release-tainted
 libdvdcss
 *-firmware
+waypipe
 %end
 
 %pre
