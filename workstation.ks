@@ -1,4 +1,4 @@
-# Use graphical install ?
+# Installation mode
 graphical
 
 # Keyboard layouts
