@@ -90,7 +90,7 @@ smplayer
 rpmfusion-free-release
 rpmfusion-nonfree-release
 rpmfusion-free-release-tainted
-rpmfusion-nonfree-tainted
+rpmfusion-nonfree-release-tainted
 %end
 
 %post 
