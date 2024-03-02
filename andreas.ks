@@ -18,7 +18,7 @@ repo --cost=0 --name=rpmfusion-nonfree-tainted --baseurl=http://download1.rpmfus
 repo --cost=0 --name=rpmfusion-free-tainted --baseurl=http://download1.rpmfusion.org/free/fedora/tainted/$releasever/$basearch/
 repo  --name=fedora-cisco-openh264 --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
 
-# Run the Setup Agent on first boot
+# Run the Setup Agent on first boot?
 firstboot --disable
 
 # Hard disk partitioning scheme
@@ -34,7 +34,7 @@ network --hostname=andreas-nb
 reboot --eject
 
 # Disable root user
-rootpw --lock
+rootpw --iscrypted $6$T.Nj9Qx4pFmCkgUM$izuImkeE61bOflLG6d.niGLYWhuQjcrzVdiJbf0KM5ZyhnFp13HpVhLKNfvPFffkTRcXkTr4JBTrpIQv49tdb1
 
 # System timezone
 timezone Europe/Berlin --utc
@@ -47,7 +47,7 @@ services --enabled=sshd,fail2ban,dnf-automatic-install.timer
 
 # Configure User
 user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
-sshkey --username=andreas  "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAokmKhXPt5UBkmgc55RmcvhCVpo8B9FgMaDhgOlQvzbAAAAD3NzaDpkZ290dHNjaGFsaw=="
+sshkey --username=andreas "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAokmKhXPt5UBkmgc55RmcvhCVpo8B9FgMaDhgOlQvzbAAAAD3NzaDpkZ290dHNjaGFsaw=="
 
 %packages
 # Mandatory packages
