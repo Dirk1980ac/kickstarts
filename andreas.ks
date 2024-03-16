@@ -127,11 +127,6 @@ DNS=222:9b9a:73de:5323:1074:29b:e210:1a11 21f:221c:f061:7992:90c:db90:e2bc:d0bc
 FallbackDNS=8.8.8.8#dns.google 8.8.4.4#dns.google 2001:4860:4860::8888#dns.google 2001:4860:4860::8844#dns.google 1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com 2606:4700:4700::1111#cloudflare-dns.com 2606:4700:4700::1001#cloudflare-dns.com
 EOF
 
-# Disable auto dns for existing connection enp3s0
-# FIXME: This dows not work, at least sometimes! - WHY?
-nmcli --offline connection modify enp3s0 ipv4.ignore-auto-dns true
-nmcli --offline connection modify enp3s0 ipv6.ignore-auto-dns true
-
 # Change default network options
 cat <<EOF > /etc/NetworkManager/conf.d/00-privacy.conf
 [main]
