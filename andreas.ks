@@ -17,6 +17,7 @@ repo --cost=0 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfu
 repo --cost=0 --name=rpmfusion-nonfree-tainted --baseurl=http://download1.rpmfusion.org/nonfree/fedora/tainted/$releasever/$basearch/
 repo --cost=0 --name=rpmfusion-free-tainted --baseurl=http://download1.rpmfusion.org/free/fedora/tainted/$releasever/$basearch/
 repo  --name=fedora-cisco-openh264 --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
+repo --cost=0 --install --name=copr-beilalexander-yggdrasil-go --baseurl=https://download.copr.fedorainfracloud.org/results/neilalexander/yggdrasil-go/fedora-$releasever-$basearch/
 
 # Run the Setup Agent on first boot?
 firstboot --disable
@@ -43,7 +44,7 @@ timezone Europe/Berlin --utc
 firewall --enable --service=ssh --service=dhcpv6-client --service=mdns
 
 # Enable services
-services --enabled=sshd,fail2ban,dnf-automatic-install.timer
+services --enabled=sshd,fail2ban,yggdrasil,dnf-automatic-install.timer
 
 # Configure User
 user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
@@ -72,6 +73,7 @@ waypipe
 fail2ban
 dnf-automatic
 htop
+yggdrasil
 # Andreas wishlist
 gnome-tweaks
 gnome-extensions-app
@@ -95,17 +97,12 @@ virt-manager
 dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
 dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
-# Install yggdrasil
-dnf copr enable -y neilalexander/yggdrasil-go
-dnf install -y yggdrasil
-
 # Configure yggdrasil
 /usr/bin/yggdrasil -genconf -json > /etc/yggdrasil.generated.conf
 jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:443","tls://ygg-uplink.thingylabs.io:443","tls://supergay.network:443","tls://[2a03:3b40:fe:ab::1]:993","tls://37.205.14.171:993"]' /etc/yggdrasil.generated.conf > /etc/yggdrasil.conf
-systemctl enable yggdrasil
 
 # Add a firewall zone for the yggdrasil network and only allow ssh for this
-# zone which Unfortunately is not possible with the kickstart 'firewall' directive
+# zone what is unfortunately not possible with the kickstart 'firewall' directive
 firewall-cmd --permanent --new-zone=yggdrasil
 firewall-cmd --permanent --zone=yggdrasil --add-interface=tun0
 firewall-cmd --permanent --zone=yggdrasil --add-service=ssh
