@@ -77,6 +77,7 @@ gnome-tweaks
 gnome-extensions-app
 foliate
 vlc
+ffmpeg
 libdvdcss
 gnucash
 virt-manager
@@ -128,8 +129,8 @@ EOF
 
 # Disable auto dns for existing connection enp3s0
 # FIXME: This dows not work, at least sometimes! - WHY?
-nmcli connection modify enp3s0 ipv4.ignore-auto-dns true
-nmcli connection modify enp3s0 ipv6.ignore-auto-dns true
+nmcli --offline connection modify enp3s0 ipv4.ignore-auto-dns true
+nmcli --offline connection modify enp3s0 ipv6.ignore-auto-dns true
 
 # Change default network options
 cat <<EOF > /etc/NetworkManager/conf.d/00-privacy.conf
