@@ -126,7 +126,7 @@ EOF
 mkdir -p /etc/systemd/resolved.conf.d
 cat << EOF > /etc/systemd/resolved.conf.d/zzz-local.conf
 [Resolve]
-DNS=222:9b9a:73de:5323:1074:29b:e210:1a11
+DNS=222:9b9a:73de:5323:1074:29b:e210:1a11 21f:221c:f061:7992:90c:db90:e2bc:d0bc
 FallbackDNS=8.8.8.8#dns.google 8.8.4.4#dns.google 2001:4860:4860::8888#dns.google 2001:4860:4860::8844#dns.google 1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com 2606:4700:4700::1111#cloudflare-dns.com 2606:4700:4700::1001#cloudflare-dns.com
 EOF
 
