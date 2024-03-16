@@ -54,31 +54,30 @@ sshkey --username=andreas "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG
 @^workstation-product-environment
 glibc-all-langpacks
 initscripts
-# Do not install kernel debug packages and install default Kernel
 -kernel-*debug
 kernel
 kernel-modules
 kernel-modules-extra
-# Avoid errors when using cockpit-client for remote access
-# so do not install a local cockpit server
--cockpit
-# Usefull packages
+*-firmware
+# RPMFusion repos
+rpmfusion-free-release
+rpmfusion-nonfree-release
+rpmfusion-free-release-tainted
+rpmfusion-nonfree-release-tainted
+# Godfathers wishlist
+cockpit
 mc
 NetworkManager-tui
 waypipe
-# Device firmwares
-*-firmware
-# Fail2Ban for ssh
 fail2ban
-# Add DVD support
-libdvdcss
-# Automatic system uodates
 dnf-automatic
+htop
 # Andreas wishlist
 gnome-tweaks
 gnome-extensions-app
 foliate
 vlc
+libdvdcss
 gnucash
 virt-manager
 calibre
@@ -87,10 +86,7 @@ video-downloader
 telegram-desktop
 digikam
 smplayer
-rpmfusion-free-release
-rpmfusion-nonfree-release
-rpmfusion-free-release-tainted
-rpmfusion-nonfree-release-tainted
+virt-manager
 %end
 
 %post 
