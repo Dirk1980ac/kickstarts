@@ -47,7 +47,7 @@ firewall --enable --service=ssh --service=dhcpv6-client --service=mdns
 services --enabled=sshd,fail2ban,yggdrasil,dnf-automatic-install.timer
 
 # Configure User
-user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
+user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video,libvirt --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
 sshkey --username=andreas "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAokmKhXPt5UBkmgc55RmcvhCVpo8B9FgMaDhgOlQvzbAAAAD3NzaDpkZ290dHNjaGFsaw=="
 
 %packages
