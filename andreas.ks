@@ -74,6 +74,7 @@ fail2ban
 dnf-automatic
 htop
 yggdrasil
+zsh
 # Andreas wishlist
 gnome-tweaks
 gnome-extensions-app
