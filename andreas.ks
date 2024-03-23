@@ -17,7 +17,7 @@ repo --cost=0 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfu
 repo --cost=0 --name=rpmfusion-nonfree-tainted --baseurl=http://download1.rpmfusion.org/nonfree/fedora/tainted/$releasever/$basearch/
 repo --cost=0 --name=rpmfusion-free-tainted --baseurl=http://download1.rpmfusion.org/free/fedora/tainted/$releasever/$basearch/
 repo  --name=fedora-cisco-openh264 --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
-repo --cost=0 --install --name=copr-beilalexander-yggdrasil-go --baseurl=https://download.copr.fedorainfracloud.org/results/neilalexander/yggdrasil-go/fedora-$releasever-$basearch/
+repo --cost=0 --name=copr-beilalexander-yggdrasil-go --baseurl=https://download.copr.fedorainfracloud.org/results/neilalexander/yggdrasil-go/fedora-$releasever-$basearch/
 
 # Run the Setup Agent on first boot?
 firstboot --disable
@@ -26,7 +26,7 @@ firstboot --disable
 autopart --type=btrfs
 
 # Do not delete existing partitions
-clearpart --all --initlabel
+clearpart --none --initlabel
 
 # Set a bit more meaningful hostname
 network --hostname=andreas-nb
@@ -35,7 +35,7 @@ network --hostname=andreas-nb
 reboot --eject
 
 # Disable root user
-rootpw --iscrypted $6$T.Nj9Qx4pFmCkgUM$izuImkeE61bOflLG6d.niGLYWhuQjcrzVdiJbf0KM5ZyhnFp13HpVhLKNfvPFffkTRcXkTr4JBTrpIQv49tdb1
+rootpw --lock
 
 # System timezone
 timezone Europe/Berlin --utc
