@@ -104,9 +104,9 @@ jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:
 
 # Add a firewall zone for the yggdrasil network and only allow ssh for this
 # zone what is unfortunately not possible with the kickstart 'firewall' directive
-firewall-cmd --permanent --new-zone=yggdrasil
-firewall-cmd --permanent --zone=yggdrasil --add-interface=tun0
-firewall-cmd --permanent --zone=yggdrasil --add-service=ssh
+firewall-offline-cmd --permanent --new-zone=yggdrasil
+firewall-offline-cmd --permanent --zone=yggdrasil --add-interface=tun0
+firewall-offline-cmd --permanent --zone=yggdrasil --add-service=ssh
 
 # Configure Fail2Ban to protect against ssh brute force attacks.
 cat << EOF > /etc/fail2ban/jail.d/10-sshd.conf
