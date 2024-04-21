@@ -236,9 +236,7 @@ dnf install -y yggdrasil
 /usr/bin/yggdrasil -genconf -json > /etc/yggdrasil.generated.conf
 jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:443","tls://ygg-uplink.thingylabs.io:443","tls://supergay.network:443","tls://[2a03:3b40:fe:ab::1]:993","tls://37.205.14.171:993"]' /etc/yggdrasil.generated.conf > /etc/yggdrasil.conf
 
-
-# Lock screen on yubikey removal
-# Comment out this block if you don't want this behaviour
+# Screen locking script
 cat << EOF > /usr/local/bin/lockscreen.sh
 #!/bin/sh
 #Author: https://gist.github.com/jhass/070207e9d22b314d9992
@@ -256,7 +254,9 @@ done
 EOF
 
 # UDEV rules to trigger the screen locking script
+# Uncomment the rule in the file created below to enable screen locking on
+# yubikey removal. 
 cat << EOF > /etc/udev/rules.d/20-yubikey.rules
-ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_MODEL_ID}=="0407", ENV{ID_VENDOR_ID}=="1050", RUN+="/usr/local/bin/lockscreen.sh"
+#ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_MODEL_ID}=="0407", ENV{ID_VENDOR_ID}=="1050", RUN+="/usr/local/bin/lockscreen.sh"
 EOF
 %end

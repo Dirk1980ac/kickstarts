@@ -84,7 +84,6 @@ dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
 # Enable USB FIDO2 token to be used with sssd.
 setsebool -P sssd_use_usb 1
 
-
 # Set SSHd config hardening overrides
 cat << EOF > /etc/ssh/sshd_config.d/00-0local.conf
 PasswordAuthentication no
@@ -97,56 +96,6 @@ cat <<EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 // Domain admins are also machine admins
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
-});
-
-// Allow any user in the 'libvirt' and the 'admins' group to connect to system
-// libvirtd without entering a password.
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.libvirt.unix.manage" &&
-        subject.isInGroup("libvirt") ||
-        subject.isInGroup("admins")) {
-        return polkit.Result.YES;
-    }
-});
-
-// firewalld authorizations/policy for the wheel group.
-//
-// Allow users in the wheel group to use firewalld without being 
-// interrupted by a password dialog
-
-polkit.addRule(function(action, subject) {
-    if ((action.id == "org.fedoraproject.FirewallD1.config" ||
-        action.id == "org.fedoraproject.FirewallD1.direct" ||
-        action.id == "org.fedoraproject.FirewallD1.ipset" ||
-        action.id == "org.fedoraproject.FirewallD1.policy" ||
-        action.id == "org.fedoraproject.FirewallD1.zone") &&
-        subject.active == true && subject.isInGroup("admins")) {
-            return polkit.Result.YES;
-        }
-    }
-);
-// Allow NetworkNabager-Settings for the admins group of FreeIPA
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.freedesktop.NetworkManager.checkpoint-rollback" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-connectivity-check" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-network" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-statistics" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-wifi" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-wimax" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-wwan" ||
-        action.id == "org.freedesktop.NetworkManager.network-control" ||
-        action.id == "org.freedesktop.NetworkManager.reload" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.global-dns" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.hostname" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.own" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.system" ||
-        action.id == "org.freedesktop.NetworkManager.sleep-wake" ||
-        action.id == "org.freedesktop.NetworkManager.wifi.scan" ||
-        action.id == "org.freedesktop.NetworkManager.wifi.share.open" ||
-        action.id == "org.freedesktop.NetworkManager.wifi.share.protected" &&
-        subject.isInGroup("admin")) {
-            return polkit.Result.YES;
-        }
 });
 EOF
 %end

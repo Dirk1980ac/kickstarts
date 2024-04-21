@@ -110,131 +110,6 @@ cat << EOF > /etc/polkit-1/rules.d/40-freeipa.rules
 polkit.addAdminRule(function(action, subject) {
     return ["unix-group:admins", "unix-group:wheel"];
 });
-
-// Allow any user in the 'libvirt' , 'vmadmins' and the 'admins' group to
-// connect to system libvirtd without entering a password.
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.libvirt.unix.manage" &&
-        subject.isInGroup("libvirt") ||
-        subject.isInGroup("admins") ||
-        subject.isInGroup("vmadmins")) {
-        return polkit.Result.YES;
-    }
-});
-
-polkit.addRule(function(action, subject) {
-	if ((action.id == "org.freedesktop.locale1.set-locale" ||
-	     action.id == "org.freedesktop.locale1.set-keyboard" ||
-	     action.id == "org.freedesktop.ModemManager1.Device.Control" ||
-	     action.id == "org.freedesktop.hostname1.set-static-hostname" ||
-	     action.id == "org.freedesktop.hostname1.set-hostname" ||
-	     action.id == "org.gnome.controlcenter.datetime.configure") &&
-	    subject.active &&
-	    subject.isInGroup ("admins")) {
-		    return polkit.Result.YES;
-	    }
-});
-
-// firewalld authorizations/policy for the admins group.
-//
-// Allow users in the admins group to use firewalld without being 
-// interrupted by a password dialog
-polkit.addRule(function(action, subject) {
-    if ((action.id == "org.fedoraproject.FirewallD1.config" ||
-        action.id == "org.fedoraproject.FirewallD1.direct" ||
-        action.id == "org.fedoraproject.FirewallD1.ipset" ||
-        action.id == "org.fedoraproject.FirewallD1.policy" ||
-        action.id == "org.fedoraproject.FirewallD1.zone") &&
-        subject.active == true && subject.isInGroup("admins")) {
-            return polkit.Result.YES;
-        }
-    }
-);
-
-polkit.addRule(function(action, subject) {
-    if ((action.id === "org.freedesktop.bolt.enroll" ||
-        action.id === "org.freedesktop.bolt.authorize" ||
-        action.id === "org.freedesktop.bolt.manage") &&
-         subject.local &&
-        subject.active === true &&
-        subject.isInGroup("admins")) {
-            return polkit.Result.YES;
-    }
-});
-
-polkit.addRule(function(action, subject) {
-    if ((action.id == "org.freedesktop.Flatpak.app-install" ||
-        action.id == "org.freedesktop.Flatpak.runtime-install"||
-        action.id == "org.freedesktop.Flatpak.app-uninstall" ||
-        action.id == "org.freedesktop.Flatpak.runtime-uninstall" ||
-        action.id == "org.freedesktop.Flatpak.modify-repo") &&
-        subject.active == true && subject.isInGroup("admins")) {
-            return polkit.Result.YES;
-    }
-
-    return polkit.Result.NOT_HANDLED;
-});
-
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.freedesktop.Flatpak.override-parental-controls") {
-        return polkit.Result.AUTH_ADMIN;
-    }
-    return polkit.Result.NOT_HANDLED;
-});
-
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.freedesktop.fwupd.update-internal" &&
-        subject.active == true && subject.isInGroup("admins")) {
-            return polkit.Result.YES;
-    }
-});
-
-polkit.addRule(function(action, subject) {
-    if ((action.id == "org.freedesktop.packagekit.package-install" ||
-         action.id == "org.freedesktop.packagekit.package-remove") &&
-          subject.local && subject.active == true &&
-          subject.isInGroup("admins")) {
-            return polkit.Result.YES;
-    }
-});
-
-// Allows users belonging to privileged group to start gvfsd-admin without
-// authorization. This prevents redundant password prompt when starting
-// gvfsd-admin. The gvfsd-admin causes another password prompt to be shown
-// for each client process using the different action id and for the subject
-// based on the client process.
-polkit.addRule(function(action, subject) {
-        if ((action.id == "org.gtk.vfs.file-operations-helper") &&
-            subject.local &&
-            subject.active &&
-            subject.isInGroup ("admins") || subject.isInGroup ("wheel")) {
-            return polkit.Result.YES;
-        }
-});
-
-// Allow NetworkNabager-Settings for the admins group of FreeIPA
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.freedesktop.NetworkManager.checkpoint-rollback" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-connectivity-check" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-network" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-statistics" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-wifi" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-wimax" ||
-        action.id == "org.freedesktop.NetworkManager.enable-disable-wwan" ||
-        action.id == "org.freedesktop.NetworkManager.network-control" ||
-        action.id == "org.freedesktop.NetworkManager.reload" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.global-dns" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.hostname" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.own" ||
-        action.id == "org.freedesktop.NetworkManager.settings.modify.system" ||
-        action.id == "org.freedesktop.NetworkManager.sleep-wake" ||
-        action.id == "org.freedesktop.NetworkManager.wifi.scan" ||
-        action.id == "org.freedesktop.NetworkManager.wifi.share.open" ||
-        action.id == "org.freedesktop.NetworkManager.wifi.share.protected" &&
-        subject.isInGroup("admin")) {
-            return polkit.Result.YES;
-        }
-});
 EOF
 
 # install yggdrasil
@@ -245,8 +120,7 @@ dnf install -y yggdrasil
 /usr/bin/yggdrasil -genconf -json > /etc/yggdrasil.generated.conf
 jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:443","tls://ygg-uplink.thingylabs.io:443","tls://supergay.network:443","tls://[2a03:3b40:fe:ab::1]:993","tls://37.205.14.171:993"]' /etc/yggdrasil.generated.conf > /etc/yggdrasil.conf
 
-# Lock screen on yubikey removal
-# Comment out this block if you don't want this behaviour
+# Screen locking script
 cat << EOF > /usr/local/bin/lockscreen.sh
 #!/bin/sh
 #Author: https://gist.github.com/jhass/070207e9d22b314d9992
@@ -264,7 +138,9 @@ done
 EOF
 
 # UDEV rules to trigger the screen locking script
+# Uncomment the rule in the file created below to enable screen locking on
+# yubikey removal. 
 cat << EOF > /etc/udev/rules.d/20-yubikey.rules
-ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_MODEL_ID}=="0407", ENV{ID_VENDOR_ID}=="1050", RUN+="/usr/local/bin/lockscreen.sh"
+#ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_MODEL_ID}=="0407", ENV{ID_VENDOR_ID}=="1050", RUN+="/usr/local/bin/lockscreen.sh"
 EOF
 %end
