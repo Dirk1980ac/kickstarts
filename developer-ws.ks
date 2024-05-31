@@ -19,6 +19,7 @@ repo --cost=0 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfu
 repo --cost=0 --name=rpmfusion-nonfree-tainted --baseurl=http://download1.rpmfusion.org/nonfree/fedora/tainted/$releasever/$basearch/
 repo --cost=0 --name=rpmfusion-free-tainted --baseurl=http://download1.rpmfusion.org/free/fedora/tainted/$releasever/$basearch/
 repo  --name=fedora-cisco-openh264 --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
+repo  --name=vscode --baseurl=https://packages.microsoft.com/yumrepos/vscode
 
 # Run the Setup Agent on first boot
 firstboot --enable
@@ -110,6 +111,16 @@ cat << EOF > /etc/ssh/sshd_config.d/00-0local.conf
 PasswordAuthentication no
 AllowAgentForwarding yes
 GSSAPICleanupCredentials yes
+EOF
+
+# Add vscode repo
+cat << EOF > /etc/yum.repos.d/vscode.repo
+[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
 # Set polkit rules for domain clients.
