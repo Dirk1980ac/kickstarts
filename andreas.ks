@@ -44,7 +44,7 @@ timezone Europe/Berlin --utc
 firewall --enable --service=ssh --service=dhcpv6-client --service=mdns
 
 # Enable services
-services --enabled=sshd,fail2ban,yggdrasil,dnf-automatic-install.timer
+services --enabled=sshd,yggdrasil,dnf-automatic-install.timer
 
 # Configure User
 user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video,libvirt --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
@@ -70,7 +70,6 @@ cockpit
 mc
 NetworkManager-tui
 waypipe
-# fail2ban
 dnf-automatic
 htop
 yggdrasil
@@ -107,15 +106,6 @@ jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:
 firewall-offline-cmd --permanent --new-zone=yggdrasil
 firewall-offline-cmd --permanent --zone=yggdrasil --add-interface=tun0
 firewall-offline-cmd --permanent --zone=yggdrasil --add-service=ssh
-
-# Configure Fail2Ban to protect against ssh brute force attacks.
-cat << EOF > /etc/fail2ban/jail.d/10-sshd.conf
-[sshd]
-enabled = true
-port = 22
-filter = sshd
-maxretry = 5
-EOF
 
 # Local DNS configuration overrides
 mkdir -p /etc/systemd/resolved.conf.d
