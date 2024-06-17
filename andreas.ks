@@ -70,7 +70,7 @@ cockpit
 mc
 NetworkManager-tui
 waypipe
-fail2ban
+# fail2ban
 dnf-automatic
 htop
 yggdrasil
