@@ -44,7 +44,7 @@ timezone Europe/Berlin --utc
 firewall --enable --service=ssh --service=dhcpv6-client --service=mdns
 
 # Enable services
-services --enabled=sshd,yggdrasil,dnf-automatic-install.timer
+services --enabled=sshd,yggdrasil
 
 # Configure User
 user --name=andreas --gecos="Andreas Mittmann" --groups=wheel,audio,video,libvirt --iscrypted --password=$6$jGuZ7fveE9/eP3S.$byWeX/rz75Yi6Af/Ica9vTp/V1ar6PWUKfN3PJf7uSjUMj.8BT8PUTxWnxJiLChY6gYLij3LsQ78nUuXuFyp1.
