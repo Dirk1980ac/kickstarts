@@ -1,5 +1,5 @@
 # Installation mode
-cmdline
+graphical
 
 # Keyboard layouts
 keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
