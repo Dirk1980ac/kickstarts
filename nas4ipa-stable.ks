@@ -2,6 +2,9 @@
 text
 network --bootproto=dhcp --device=link --activate
 
+# System timezone
+timezone Europe/Berlin --utc
+
 # Basic partitioning
 clearpart --all --initlabel --disklabel=gpt
 reqpart --add-boot
