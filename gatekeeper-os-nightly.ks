@@ -1,26 +1,23 @@
-# Basic setup
-text
-network --bootproto=dhcp --device=link --activate
-
-# System timezone
-timezone Europe/Berlin --utc
-
-# Basic partitioning
-clearpart --all --initlabel --disklabel=gpt
-reqpart --add-boot
-part / --grow --fstype xfs
-
-# Keyboard layouts
-keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
-# System language
+ostreecontainer --url docker.io/dirk1980/gatekeeper-os:stable
+user --name gatekeeper --password $6$Nis9RrnHcKEhcvPn$bIyh/7mgL92wNSPFTsMh3sHcX9SIGt.nG0xfKb6uc.lgBYe52QBS6Wy8d581R/gtGTyxyewHxhOL6U5pkI8tj. --iscrypted --groups wheel
+rootpw --lock
 lang de_DE.UTF-8
+keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
+timezone Europe/Berlin --utc
+clearpart --all
+network --device=link --bootproto=dhcp --onboot=on --activate
 
-# Here's where we reference the container image to install - notice the kickstart
-# has no `%packages` section!  What's being installed here is a container image.
-ostreecontainer --url docker.io/dirk1980/gatekeeper-os:nightly
+reqpart --add-boot
 
-# Create initial administrative user
-user --name=gatekeeper --password=gatekeeper --groups=wheel
+part swap --fstype=swap --size=1024
+part / --fstype=ext4 --grow
 
-# Reboot after install
-reboot
+reboot --eject
+%post
+bootc switch --mutate-in-place --transport registry docker.io/dirk1980/gatekeeper-os:nightly
+
+# used during automatic image testing as finished marker
+if [ -c /dev/ttyS0 ]; then
+    echo "Install finished" > /dev/ttyS0
+fi
+%end

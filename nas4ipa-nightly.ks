@@ -1,26 +1,23 @@
-# Basic setup
-text
-network --bootproto=dhcp --device=link --activate
+ostreecontainer --url=docker.io/dirk1980/nas4ipa:nightly
+user --name nas4ipa --password $6$cv9TtOpm2ziBgigV$/twX.spZBQRCNDJSOKLnobURIYknvSN2tZPzzp3yY8QenMa3dGogoh36q99V4yTl0/5BU3zN/2AmQyhlHwX/f. --iscrypted --groups wheel
+rootpw --lock
+lang en_US.UTF-8
+keyboard us
+timezone UTC
+clearpart --all
+network --device=link --bootproto=dhcp --onboot=on --activate
 
-# System timezone
-timezone Europe/Berlin --utc
-
-# Basic partitioning
-clearpart --all --initlabel --disklabel=gpt
 reqpart --add-boot
-part / --grow --fstype xfs
 
-# Keyboard layouts
-keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
-# System language
-lang de_DE.UTF-8
+part swap --fstype=swap --size=1024
+part / --fstype=ext4 --grow
 
-# Here's where we reference the container image to install - notice the kickstart
-# has no `%packages` section!  What's being installed here is a container image.
-ostreecontainer --url docker.io/dirk1980/nas4ipa:nightly
+reboot --eject
+%post
+bootc switch --mutate-in-place --transport registry docker.io/dirk1980/nas4ipa:nightly
 
-# Create initial administrative user
-user --name=nas4ipa --password=nas4ipa --groups=wheel
-
-# Reboot after install
-reboot
+# used during automatic image testing as finished marker
+if [ -c /dev/ttyS0 ]; then
+    echo "Install finished" > /dev/ttyS0
+fi
+%end
