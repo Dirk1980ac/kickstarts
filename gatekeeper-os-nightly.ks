@@ -1,4 +1,4 @@
-ostreecontainer --url docker.io/dirk1980/gatekeeper-os:stable
+ostreecontainer --url docker.io/dirk1980/gatekeeper-os:nightly
 user --name gatekeeper --password $6$Nis9RrnHcKEhcvPn$bIyh/7mgL92wNSPFTsMh3sHcX9SIGt.nG0xfKb6uc.lgBYe52QBS6Wy8d581R/gtGTyxyewHxhOL6U5pkI8tj. --iscrypted --groups wheel
 rootpw --lock
 lang de_DE.UTF-8
