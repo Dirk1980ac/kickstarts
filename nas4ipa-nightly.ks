@@ -4,7 +4,7 @@ rootpw --lock
 lang de_DE.UTF-8
 keyboard de-nodeadkeys
 timezone Europe/Berlin
-clearpart --all
+clearpart --none --initlabel
 network --device=link --bootproto=dhcp --onboot=on --activate
 
 reqpart --add-boot
