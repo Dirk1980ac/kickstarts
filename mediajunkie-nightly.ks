@@ -8,8 +8,6 @@ clearpart --none --initlabel
 network --device=link --bootproto=dhcp --onboot=on --activate
 
 reqpart --add-boot
-
-part swap --fstype=swap --size=1024
 part / --fstype=ext4 --grow
 
 reboot --eject

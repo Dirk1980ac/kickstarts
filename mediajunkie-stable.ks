@@ -8,11 +8,10 @@ clearpart --none --initlabel
 network --device=link --bootproto=dhcp --onboot=on --activate
 
 reqpart --add-boot
-
-part swap --fstype=swap --size=1024
 part / --fstype=ext4 --grow
 
 reboot --eject
+
 %post
 bootc switch --mutate-in-place --transport registry docker.io/dirk1980/mediajunkie:latest
 
