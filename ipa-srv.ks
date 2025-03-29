@@ -7,15 +7,8 @@ keyboard --vckeymap=de-nodeadkeys --xlayouts='de (nodeadkeys)'
 lang de_DE.UTF-8
 
 # Network installation repos
-repo --cost=1 --name=fedora --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
+repo --name=fedora --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
 repo --name=updates
-repo --cost=0 --name=rpmfusion-free --mirrorlist=https://mirrors.rpmfusion.org/free/fedora/$releasever/$basearch
-repo --cost=0 --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/free/fedora/updates/$releasever/$basearch
-repo --cost=0 --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/$releasever/$basearch
-repo --cost=0 --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch
-repo --cost=0 --name=rpmfusion-nonfree-tainted --baseurl=http://download1.rpmfusion.org/nonfree/fedora/tainted/$releasever/$basearch/
-repo --cost=0 --name=rpmfusion-free-tainted --baseurl=http://download1.rpmfusion.org/free/fedora/tainted/$releasever/$basearch/
-repo  --name=fedora-cisco-openh264 --mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
 
 %packages
 @^server-product-environment
@@ -47,7 +40,7 @@ firewall --enable --service=freeipa-4 --service=freeipa-replication --service=ss
 
 # Generated using Blivet version 3.7.1
 # ignoredisk --only-use=vda
-autopart --type=btrfs
+autopart
 # Partition clearing information
 clearpart --none --initlabel
 
@@ -70,16 +63,9 @@ echo "network --hostname=`echo ipasrv-$RANDOM`" > /tmp/pre-hostname
 %end
 
 %post 
-dnf copr enable -y neilalexander/yggdrasil-go
-dnf install -y yggdrasil
-
-# Configure yggdrasil
-/usr/bin/yggdrasil -genconf -json > /etc/yggdrasil.generated.conf
-jq '.Peers = ["tls://ygg.yt:443","tls://ygg.mkg20001.io:443","tls://vpn.ltha.de:443","tls://ygg-uplink.thingylabs.io:443","tls://supergay.network:443","tls://[2a03:3b40:fe:ab::1]:993","tls://37.205.14.171:993"]' /etc/yggdrasil.generated.conf > /etc/yggdrasil.conf
-
 # Install additional firmware packages
-dnf install -y rpmfusion-nonfree-release-tainted
-dnf --repo=rpmfusion-nonfree-tainted install -y "*-firmware"
+dnf install -y rpmfusion-nonfree-release-tainted rpmfusion-free-release-tainted
+dnf install -y "*-firmware"
 
 # Enable USB FIDO2 token to be used with sssd.
 setsebool -P sssd_use_usb 1
