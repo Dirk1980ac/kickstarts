@@ -12,7 +12,6 @@ repo --name=updates
 
 %packages
 @^server-product-environment
-@^Infrastructure Server
 @admin-tools
 @domain-client
 @freeipa-server
