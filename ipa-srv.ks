@@ -20,19 +20,11 @@ repo --name=updates
 @headless-management
 @network-server
 @system-tools
--cockpit
+cockpit
 NetworkManager-tui
 freeipa-server-dns
 mc
 zsh
-rpmfusion-free-appstream-data
-rpmfusion-free-release
-rpmfusion-free-release-tainted
-rpmfusion-nonfree-appstream-data
-rpmfusion-nonfree-release
-rpmfusion-nonfree-release-tainted
-libdvdcss
-*-firmware
 %end
 
 # Firewall options
@@ -63,9 +55,6 @@ echo "network --hostname=`echo ipasrv-$RANDOM`" > /tmp/pre-hostname
 %end
 
 %post 
-# Install additional firmware packages
-dnf install -y rpmfusion-nonfree-release-tainted rpmfusion-free-release-tainted
-dnf install -y "*-firmware"
 
 # Enable USB FIDO2 token to be used with sssd.
 setsebool -P sssd_use_usb 1
